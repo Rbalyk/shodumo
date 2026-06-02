@@ -5,37 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19083d1c-d0e8-496a-8f54-1e4bea769695" name="Changes" comment="env">
-      <change afterPath="$PROJECT_DIR$/shodumo-auth-flow-prompt.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/.env.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/dto/refresh.dto.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/dto/register.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/dto/register.dto.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt-refresh.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt-refresh.strategy.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt.strategy.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/api/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/bearer.interceptor.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/error.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/error.interceptor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/models/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/models/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/gulpfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/i18n/en.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/uk.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/i18n/uk.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/js/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/js/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/js/icons.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/icons.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/.env.prod.example" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/.env.prod.example" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +87,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1780380810359</updated>
-      <workItem from="1780380811656" duration="26467000" />
+      <workItem from="1780380811656" duration="28026000" />
     </task>
     <task id="LOCAL-00001" summary="redirects">
       <option name="closed" value="true" />

@@ -29,10 +29,21 @@ cp .env.example .env   # then edit if needed
 
 | Variable        | Default                 | Purpose                                            |
 | --------------- | ----------------------- | -------------------------------------------------- |
-| `API_BASE_URL`  | `http://localhost:3000` | REST API base, injected into the JS bundle         |
+| `API_URL`       | `http://localhost:3000` | REST API base — single source for build, prerender and runtime |
 | `SITE_URL`      | `http://localhost:3001` | Canonical/OG/sitemap absolute URLs                 |
 | `DEFAULT_CITY`  | `lviv`                  | City slug used for the feed and pre-render         |
 | `DEV_PORT`      | `3001`                  | BrowserSync dev server port                        |
+
+`API_URL` is the **single source** of the client API address: the same value
+feeds the runtime JS bundle (`gulp build`), the pre-render fetches and injected
+markup (`gulp prerender`), and dev. The `http://localhost:3000` default applies
+only when `API_URL` is unset (local dev); in a prod build `API_URL` fully
+replaces it. Set it for prod, e.g.:
+
+```bash
+API_URL=https://api.shodumo.com npm run build
+API_URL=https://api.shodumo.com npm run prerender
+```
 
 Values are injected at build time by replacing `__API_BASE_URL__`, `__SITE_URL__`, `__DEFAULT_CITY__` tokens in the JS and HTML.
 

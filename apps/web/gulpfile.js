@@ -19,7 +19,10 @@ const del = require('del');
 const fs = require('fs');
 
 const env = {
-  API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:3000',
+  // API_URL is the single source of the client API base URL for build,
+  // prerender and the runtime bundle. localhost is only a local-dev default —
+  // in a prod build API_URL must be set and fully replaces it.
+  API_BASE_URL: process.env.API_URL || 'http://localhost:3000',
   SITE_URL: process.env.SITE_URL || 'http://localhost:3001',
   DEFAULT_CITY: process.env.DEFAULT_CITY || 'lviv',
   DEV_PORT: Number(process.env.DEV_PORT || 3001),

@@ -1,32 +1,25 @@
-/* global window, fetch, localStorage */
-// ShoDumo — thin REST client with token storage + auto-refresh on 401
+/* global window, document, fetch */
+// ShoDumo — thin REST client over cookie auth (httpOnly session + CSRF double-submit)
 (function () {
   window.SD = window.SD || {};
   var cfg = window.SD.config || {};
   var BASE = (cfg.apiBaseUrl || '').replace(/\/+$/, '');
 
-  var KEY_ACCESS = 'sd_access';
-  var KEY_REFRESH = 'sd_refresh';
+  var CSRF_COOKIE = 'csrf';
+  var MUTATING = { POST: 1, PUT: 1, PATCH: 1, DELETE: 1 };
+  // auth endpoints are CSRF-exempt server-side and need no prior session
+  var AUTH_EXEMPT = ['/auth/login', '/auth/register', '/auth/refresh', '/auth/logout'];
 
-  function getAccess() {
-    try { return localStorage.getItem(KEY_ACCESS); } catch (e) { return null; }
+  function readCookie(name) {
+    if (typeof document === 'undefined' || !document.cookie) return null;
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
   }
-  function getRefresh() {
-    try { return localStorage.getItem(KEY_REFRESH); } catch (e) { return null; }
-  }
-  function setTokens(access, refresh) {
-    try {
-      if (access) localStorage.setItem(KEY_ACCESS, access);
-      if (refresh) localStorage.setItem(KEY_REFRESH, refresh);
-    } catch (e) { /* storage disabled */ }
-  }
-  function clearTokens() {
-    try {
-      localStorage.removeItem(KEY_ACCESS);
-      localStorage.removeItem(KEY_REFRESH);
-    } catch (e) { /* noop */ }
-  }
-  function isAuthed() { return !!getAccess(); }
+
+  // The session tokens are httpOnly (unreadable); the readable `csrf` cookie is
+  // set alongside them on login/confirm and cleared on logout, so its presence
+  // is a reliable client-side hint for "are we logged in".
+  function isAuthed() { return !!readCookie(CSRF_COOKIE); }
 
   function notifyExpired() {
     try {
@@ -54,22 +47,32 @@
     return path + sep + 'lang=' + encodeURIComponent(lang);
   }
 
-  // low-level request with one transparent refresh-retry on 401
+  function isAuthExempt(path) {
+    for (var i = 0; i < AUTH_EXEMPT.length; i++) {
+      if (path.indexOf(AUTH_EXEMPT[i]) === 0) return true;
+    }
+    return false;
+  }
+
+  // low-level request: cookies travel via credentials:'include'; mutations echo
+  // the csrf cookie as a header; one transparent refresh-retry on 401
   function request(method, path, body, opts) {
     opts = opts || {};
     var url = BASE + (method === 'GET' ? withLang(path) : path);
     var headers = { Accept: 'application/json' };
     if (body !== undefined && body !== null) headers['Content-Type'] = 'application/json';
-    var token = getAccess();
-    if (token && !opts.noAuth) headers.Authorization = 'Bearer ' + token;
+    if (MUTATING[method] && !isAuthExempt(path)) {
+      var csrf = readCookie(CSRF_COOKIE);
+      if (csrf) headers['X-CSRF-Token'] = csrf;
+    }
 
-    var init = { method: method, headers: headers };
+    var init = { method: method, headers: headers, credentials: 'include' };
     if (body !== undefined && body !== null) init.body = JSON.stringify(body);
 
     return fetch(url, init).then(function (res) {
-      if (res.status === 401 && !opts._retried && getRefresh() && !opts.noAuth) {
+      if (res.status === 401 && !opts._retried && !opts.noAuth && isAuthed()) {
         return doRefresh().then(function (ok) {
-          if (!ok) { clearTokens(); notifyExpired(); throw httpError(res.status, 'Unauthorized'); }
+          if (!ok) { notifyExpired(); throw httpError(res.status, 'Unauthorized'); }
           var retryOpts = Object.assign({}, opts, { _retried: true });
           return request(method, path, body, retryOpts);
         });
@@ -102,32 +105,20 @@
   var _refreshing = null;
   function doRefresh() {
     if (_refreshing) return _refreshing;
-    var rt = getRefresh();
-    if (!rt) return Promise.resolve(false);
     _refreshing = fetch(BASE + '/auth/refresh', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ refreshToken: rt }),
+      headers: { Accept: 'application/json' },
+      credentials: 'include',
     })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) {
-        if (data && data.accessToken) {
-          setTokens(data.accessToken, data.refreshToken || rt);
-          return true;
-        }
-        return false;
-      })
+      .then(function (res) { return res.ok; })
       .catch(function () { return false; })
       .then(function (ok) { _refreshing = null; return ok; });
     return _refreshing;
   }
 
   var api = {
-    // ---- tokens ----
+    // ---- session ----
     isAuthed: isAuthed,
-    getAccess: getAccess,
-    setTokens: setTokens,
-    clearTokens: clearTokens,
 
     // ---- events / feed ----
     getEvents: function (params) {
@@ -152,15 +143,20 @@
     },
 
     // ---- auth ----
+    // no User is created here: the API saves a pending registration and emails a
+    // confirmation link. Resolves with the 202 body { message }.
     register: function (payload) {
-      return request('POST', '/auth/register', payload, { noAuth: true }).then(saveAuth);
+      return request('POST', '/auth/register', payload, { noAuth: true });
     },
+    // sets the session cookies server-side; resolves with the profile
     login: function (payload) {
-      return request('POST', '/auth/login', payload, { noAuth: true }).then(saveAuth);
+      return request('POST', '/auth/login', payload, { noAuth: true });
     },
     refresh: doRefresh,
     me: function () { return request('GET', '/auth/me'); },
-    logout: function () { clearTokens(); return Promise.resolve(); },
+    logout: function () {
+      return request('POST', '/auth/logout', {}, { noAuth: true }).catch(function () { /* noop */ });
+    },
 
     // ---- attendance ----
     attend: function (eventId, type) {
@@ -170,11 +166,6 @@
       return request('DELETE', '/events/' + encodeURIComponent(eventId) + '/attend', { type: type || 'GOING' });
     },
   };
-
-  function saveAuth(data) {
-    if (data && data.accessToken) setTokens(data.accessToken, data.refreshToken);
-    return data;
-  }
 
   window.SD.api = api;
 })();

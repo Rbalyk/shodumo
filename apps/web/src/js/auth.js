@@ -1,8 +1,10 @@
 /* global window, document */
-// ShoDumo — auth modal (login / register tabs) + session helpers
+// ShoDumo — auth modal (login / register tabs) + session helpers.
+// Session lives in httpOnly cookies; the profile comes from GET /auth/me.
 (function () {
   window.SD = window.SD || {};
   var api = window.SD.api;
+  var cfg = window.SD.config || {};
   var icon = window.SD.icon || function () { return ''; };
   var toast = window.SD.toast || function () {};
   var t = window.SD.t || function (k) { return k; };
@@ -29,11 +31,24 @@
       '    </div>' +
       '    <button class="modal__close" type="button" aria-label="' + t('modal.close') + '" data-close>' + icon('close', { size: 20 }) + '</button>' +
       '  </div>' +
-      '  <div class="modal__tabs" role="tablist">' +
+      '  <div class="modal__tabs" role="tablist" data-tabs>' +
       '    <button type="button" data-tab="login" class="is-active">' + t('auth.login') + '</button>' +
       '    <button type="button" data-tab="register">' + t('auth.register') + '</button>' +
       '  </div>' +
       '  <form data-form novalidate>' +
+      '    <fieldset class="modal__roles" data-field-role hidden>' +
+      '      <span class="field__label">' + t('modal.role') + '</span>' +
+      '      <label class="role-opt">' +
+      '        <input type="radio" name="role" value="attendee" checked>' +
+      '        <span class="role-opt__body"><span class="role-opt__title">' + t('modal.role.attendee') + '</span>' +
+      '        <span class="role-opt__hint">' + t('modal.role.attendeeHint') + '</span></span>' +
+      '      </label>' +
+      '      <label class="role-opt">' +
+      '        <input type="radio" name="role" value="organizer">' +
+      '        <span class="role-opt__body"><span class="role-opt__title">' + t('modal.role.organizer') + '</span>' +
+      '        <span class="role-opt__hint">' + t('modal.role.organizerHint') + '</span></span>' +
+      '      </label>' +
+      '    </fieldset>' +
       '    <label class="field modal__field" data-field-name hidden>' +
       '      <span class="field__label">' + t('modal.name') + '</span>' +
       '      <span class="field__wrap"><input type="text" name="name" autocomplete="name" placeholder="' + t('modal.namePlaceholder') + '"></span>' +
@@ -50,7 +65,14 @@
       '    <p class="form-error" data-error></p>' +
       '    <button type="submit" class="modal__submit" data-submit>' + t('modal.submit.login') + '</button>' +
       '  </form>' +
-      '  <p class="modal__legal">' + t('modal.legal') + '</p>' +
+      '  <div class="modal__sent" data-sent hidden>' +
+      '    <div class="modal__sent-icon">' + icon('mail', { size: 32 }) + '</div>' +
+      '    <h3 class="modal__sent-title">' + t('modal.sent.title') + '</h3>' +
+      '    <p class="modal__sent-text" data-sent-text></p>' +
+      '    <p class="modal__sent-hint">' + t('modal.sent.hint') + '</p>' +
+      '    <button type="button" class="modal__submit" data-sent-done>' + t('modal.sent.done') + '</button>' +
+      '  </div>' +
+      '  <p class="modal__legal" data-legal>' + t('modal.legal') + '</p>' +
       '</div>';
     document.body.appendChild(el);
     modalEl = el;
@@ -67,20 +89,43 @@
       btn.addEventListener('click', function () { setMode(btn.getAttribute('data-tab')); });
     });
     el.querySelector('[data-form]').addEventListener('submit', onSubmit);
+    el.querySelector('[data-sent-done]').addEventListener('click', close);
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && el.getAttribute('aria-hidden') === 'false') close();
     });
   }
 
+  // show the form (login/register) and hide the "email sent" panel
+  function showForm() {
+    var el = modalEl;
+    el.querySelector('[data-form]').hidden = false;
+    el.querySelector('[data-tabs]').hidden = false;
+    el.querySelector('[data-legal]').hidden = false;
+    el.querySelector('[data-sent]').hidden = true;
+  }
+
+  function showSent(email) {
+    var el = modalEl;
+    el.querySelector('[data-form]').hidden = true;
+    el.querySelector('[data-tabs]').hidden = true;
+    el.querySelector('[data-legal]').hidden = true;
+    el.querySelector('[data-sent-text]').textContent = t('modal.sent.text').replace('{email}', email);
+    el.querySelector('[data-title]').textContent = t('modal.sent.title');
+    el.querySelector('[data-hint]').textContent = '';
+    el.querySelector('[data-sent]').hidden = false;
+  }
+
   function setMode(next) {
     mode = next;
     var el = modalEl;
+    showForm();
     el.querySelectorAll('[data-tab]').forEach(function (b) {
       b.classList.toggle('is-active', b.getAttribute('data-tab') === next);
     });
     var isReg = next === 'register';
     el.querySelector('[data-title]').textContent = isReg ? t('modal.register.title') : t('modal.login.title');
     el.querySelector('[data-hint]').textContent = isReg ? t('modal.register.hint') : t('modal.login.hint');
+    el.querySelector('[data-field-role]').hidden = !isReg;
     el.querySelector('[data-field-name]').hidden = !isReg;
     el.querySelector('[data-forgot]').style.display = isReg ? 'none' : '';
     el.querySelector('[data-submit]').textContent = isReg ? t('modal.submit.register') : t('modal.submit.login');
@@ -97,12 +142,9 @@
     var submit = el.querySelector('[data-submit]');
     errEl.textContent = '';
 
-    var payload = {
-      email: form.email.value.trim(),
-      password: form.password.value,
-    };
-    if (mode === 'register') payload.name = form.name.value.trim();
-    if (!payload.email || !payload.password) {
+    var email = form.email.value.trim();
+    var password = form.password.value;
+    if (!email || !password) {
       errEl.textContent = t('modal.errFields');
       return;
     }
@@ -111,19 +153,32 @@
     var prevText = submit.textContent;
     submit.textContent = t('modal.submitting');
 
-    var creds = { email: payload.email, password: payload.password };
-    if (mode === 'register' && payload.name) creds.name = payload.name;
-    var op = mode === 'register' ? api.register(creds) : api.login(creds);
-    op.then(function () {
-      // optimistic local value, then reconcile with the server profile
-      saveUser({ name: payload.name || '', email: payload.email });
-      toast(mode === 'register' ? t('toast.registered') : t('toast.welcome'), { icon: 'check' });
-      close();
-      syncAuthUI();
-      refreshUser();
-      var cb = pending; pending = null;
-      if (typeof cb === 'function') cb();
-    }).catch(function (err) {
+    var op;
+    if (mode === 'register') {
+      var roleInput = form.querySelector('input[name="role"]:checked');
+      var payload = {
+        email: email,
+        password: password,
+        role: roleInput ? roleInput.value : 'attendee',
+      };
+      var name = form.name.value.trim();
+      if (name) payload.name = name;
+      op = api.register(payload).then(function () {
+        // no session yet — the user must confirm via the emailed link
+        showSent(email);
+      });
+    } else {
+      op = api.login({ email: email, password: password }).then(function (profile) {
+        setProfile(profile);
+        toast(t('toast.welcome'), { icon: 'check' });
+        close();
+        syncAuthUI();
+        var cb = pending; pending = null;
+        if (typeof cb === 'function') cb();
+      });
+    }
+
+    op.catch(function (err) {
       errEl.textContent = friendly(err);
     }).then(function () {
       submit.disabled = false;
@@ -161,45 +216,23 @@
     open({ onSuccess: cb });
   }
 
-  // ---- current user (no /me endpoint: derive from form + JWT email) ----
+  // ---- current profile (cached for instant UI; reconciled via /auth/me) ----
   var USER_KEY = 'sd_user';
-  function saveUser(u) {
-    try { localStorage.setItem(USER_KEY, JSON.stringify(u || {})); } catch (e) { /* noop */ }
+  function setProfile(p) {
+    try {
+      if (p) localStorage.setItem(USER_KEY, JSON.stringify(p));
+      else localStorage.removeItem(USER_KEY);
+    } catch (e) { /* noop */ }
   }
   function getUser() {
-    var u = null;
-    try { u = JSON.parse(localStorage.getItem(USER_KEY) || 'null'); } catch (e) { u = null; }
-    if (!u || !u.email) {
-      var fromToken = userFromToken();
-      if (fromToken.email) {
-        u = { email: fromToken.email, name: (u && u.name) || fromToken.name || '' };
-      }
-    }
-    return u || {};
-  }
-  function clearUser() {
-    try { localStorage.removeItem(USER_KEY); } catch (e) { /* noop */ }
-  }
-  // decode { email, name } from the access-token payload (no network)
-  function userFromToken() {
-    var t = api.getAccess && api.getAccess();
-    if (!t) return {};
-    try {
-      var part = t.split('.')[1];
-      part = part.replace(/-/g, '+').replace(/_/g, '/');
-      var json = decodeURIComponent(escape(atob(part)));
-      var payload = JSON.parse(json);
-      return { email: payload.email || '', name: payload.name || '' };
-    } catch (e) { return {}; }
+    try { return JSON.parse(localStorage.getItem(USER_KEY) || 'null') || {}; }
+    catch (e) { return {}; }
   }
   // pull the authoritative profile from /auth/me and reflect it in the UI
   function refreshUser() {
-    if (!api.me || !api.isAuthed()) return;
+    if (!api.me || !api.isAuthed()) { setProfile(null); syncAuthUI(); return; }
     api.me().then(function (u) {
-      if (u && u.email) {
-        saveUser({ name: u.name || '', email: u.email });
-        syncAuthUI();
-      }
+      if (u && u.email) { setProfile(u); syncAuthUI(); }
     }).catch(function () { /* keep cached value */ });
   }
   function initials(u) {
@@ -218,17 +251,28 @@
     return HUES[h % HUES.length];
   }
 
+  function createEventHref() {
+    var base = (cfg.appUrl || '').replace(/\/+$/, '');
+    return base + '/cabinet/dashboard';
+  }
+
   // reflect auth state in [data-auth] toggles across the page
   function syncAuthUI() {
     var authed = api.isAuthed();
+    var u = authed ? getUser() : {};
     document.querySelectorAll('[data-auth="in"]').forEach(function (n) {
       n.hidden = !authed;
     });
     document.querySelectorAll('[data-auth="out"]').forEach(function (n) {
       n.hidden = authed;
     });
+    // organizer-only controls (e.g. "Create event") link into the cabinet app
+    var isOrganizer = authed && u.role === 'ORGANIZER';
+    document.querySelectorAll('[data-auth-organizer]').forEach(function (n) {
+      n.hidden = !isOrganizer;
+      if (isOrganizer && n.tagName === 'A') n.setAttribute('href', createEventHref());
+    });
     if (authed) {
-      var u = getUser();
       document.querySelectorAll('[data-auth-avatar]').forEach(function (n) {
         n.textContent = initials(u);
         n.classList.add(hueFor(u.email || u.name || 'x'));
@@ -240,14 +284,14 @@
 
   function logout() {
     api.logout();
-    clearUser();
+    setProfile(null);
     syncAuthUI();
     toast(t('toast.loggedOut'), { icon: 'check' });
   }
 
-  // when a token refresh fails, api.js clears tokens and fires this event
+  // when a token refresh fails, api.js fires this event
   document.addEventListener('sd:auth-expired', function () {
-    clearUser();
+    setProfile(null);
     syncAuthUI();
   });
 

@@ -24,6 +24,9 @@ const env = {
   // in a prod build API_URL must be set and fully replaces it.
   API_BASE_URL: process.env.API_URL || 'http://localhost:3000',
   SITE_URL: process.env.SITE_URL || 'http://localhost:3001',
+  // base URL of the Angular cabinet/admin app (app.shodumo.com in prod) — the
+  // public site links organizers here for "Create event"; shares the auth cookie
+  APP_URL: process.env.APP_URL || 'http://localhost:4200',
   DEFAULT_CITY: process.env.DEFAULT_CITY || 'lviv',
   DEV_PORT: Number(process.env.DEV_PORT || 3001),
 };
@@ -115,6 +118,7 @@ function htmlFor(langCfg) {
       .pipe(replace('<!--I18N_DATA-->', i18nScript))
       .pipe(replace('__API_BASE_URL__', env.API_BASE_URL))
       .pipe(replace('__SITE_URL__', env.SITE_URL))
+      .pipe(replace('__APP_URL__', env.APP_URL))
       .pipe(replace('__DEFAULT_CITY__', env.DEFAULT_CITY))
       .pipe(
         htmlmin({
@@ -152,6 +156,7 @@ function scripts() {
     .pipe(concat('bundle.js'))
     .pipe(replace('__API_BASE_URL__', env.API_BASE_URL))
     .pipe(replace('__SITE_URL__', env.SITE_URL))
+    .pipe(replace('__APP_URL__', env.APP_URL))
     .pipe(replace('__DEFAULT_CITY__', env.DEFAULT_CITY))
     .pipe(terser())
     .pipe(sourcemaps.write('.'))

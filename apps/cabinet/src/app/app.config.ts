@@ -4,23 +4,21 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
 
 import { routes } from './app.routes';
-import { bearerInterceptor } from './core/http/bearer.interceptor';
+import { credentialsInterceptor } from './core/http/credentials.interceptor';
 import { errorInterceptor } from './core/http/error.interceptor';
 import { AuthService } from './core/auth/auth.service';
 
-/** Refresh the authoritative profile from /auth/me on boot when a token exists. */
+// Resolve the session from the auth cookie on boot: /auth/me succeeds when the
+// cookie is valid, otherwise we start logged-out. Blocks routing until known.
 function initAuth(auth: AuthService) {
-  return () => {
-    if (!auth.isAuthenticated()) return of(null);
-    return auth.loadMe().pipe(catchError(() => of(null)));
-  };
+  return () => auth.loadMe().pipe(catchError(() => of(null)));
 }
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(withInterceptors([bearerInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([credentialsInterceptor, errorInterceptor])),
     {
       provide: APP_INITIALIZER,
       useFactory: initAuth,

@@ -39,10 +39,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     request: HttpRequest<unknown>,
     handler: HttpHandlerFn,
   ): Observable<HttpEvent<unknown>> =>
+    // Cookie auth: refresh rotates the access cookie server-side, so the retried
+    // request just needs to be re-sent — the browser attaches the fresh cookie.
     auth.refresh().pipe(
-      switchMap((tokens) =>
-        handler(request.clone({ setHeaders: { Authorization: `Bearer ${tokens.accessToken}` } })),
-      ),
+      switchMap(() => handler(request)),
       catchError((refreshErr) => {
         auth.logout();
         void router.navigate(['/login']);
@@ -54,7 +54,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       const isAuthCall = AUTH_PATHS.some((p) => req.url.includes(p));
 
-      if (err.status === 401 && !isAuthCall && auth.refreshToken) {
+      if (err.status === 401 && !isAuthCall) {
         return retryWithRefresh(req, next);
       }
 

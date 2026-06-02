@@ -4,7 +4,39 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="19083d1c-d0e8-496a-8f54-1e4bea769695" name="Changes" comment="" />
+    <list default="true" id="19083d1c-d0e8-496a-8f54-1e4bea769695" name="Changes" comment="env">
+      <change afterPath="$PROJECT_DIR$/shodumo-auth-flow-prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/dto/refresh.dto.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/dto/register.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/dto/register.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt-refresh.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt-refresh.strategy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt.strategy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/auth/strategies/jwt.strategy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/api/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/api/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/app.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/bearer.interceptor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/error.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/error.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/models/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/app/core/models/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/gulpfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/en.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/i18n/en.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/uk.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/i18n/uk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/icons.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/icons.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/.env.prod.example" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/.env.prod.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,39 +45,63 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Rbalyk&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Rbalyk/shodumo.git&quot;,
+    &quot;accountId&quot;: &quot;6997d9e3-0857-4b1e-8425-25ceae8f2f32&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="3EZKmYvggyuJtEj1A32LgZu5C4r" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "last_opened_file_path": "/Users/romanbalyk/WebstormProjects/shodumo/shodumo-cabinet",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "/Users/romanbalyk/WebstormProjects/shodumo/shodumo-api/node_modules/typescript/lib"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.localhost:3002.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/romanbalyk/WebstormProjects/shodumo/shodumo-cabinet&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/romanbalyk/WebstormProjects/shodumo/apps/api/node_modules/typescript/lib&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/shodumo-cabinet" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/apps/api" />
       <recent name="$PROJECT_DIR$/apps/cabinet/claude-md" />
       <recent name="$PROJECT_DIR$/apps/api/claude-md" />
       <recent name="$PROJECT_DIR$/apps/web/claude-files" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/shodumo-web" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="localhost:3002" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:3002">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:3002" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -61,11 +117,77 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1780380810359</updated>
-      <workItem from="1780380811656" duration="16724000" />
+      <workItem from="1780380811656" duration="26467000" />
     </task>
+    <task id="LOCAL-00001" summary="redirects">
+      <option name="closed" value="true" />
+      <created>1780410744764</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1780410744764</updated>
+    </task>
+    <task id="LOCAL-00002" summary="env">
+      <option name="closed" value="true" />
+      <created>1780410845225</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1780410845225</updated>
+    </task>
+    <task id="LOCAL-00003" summary="env">
+      <option name="closed" value="true" />
+      <created>1780421459352</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1780421459352</updated>
+    </task>
+    <task id="LOCAL-00004" summary="chore: add prod deploy configs">
+      <option name="closed" value="true" />
+      <created>1780424055911</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1780424055911</updated>
+    </task>
+    <task id="LOCAL-00005" summary="chore: add prod deploy configs">
+      <option name="closed" value="true" />
+      <created>1780425257106</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1780425257106</updated>
+    </task>
+    <task id="LOCAL-00006" summary="env">
+      <option name="closed" value="true" />
+      <created>1780429709146</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1780429709146</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="redirects" />
+    <MESSAGE value="chore: add prod deploy configs" />
+    <MESSAGE value="env" />
+    <option name="LAST_COMMIT_MESSAGE" value="env" />
   </component>
 </project>

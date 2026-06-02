@@ -6,25 +6,11 @@ export type EventStatus = 'DRAFT' | 'PENDING' | 'PUBLISHED' | 'ARCHIVED';
 
 export type Lang = 'uk' | 'en';
 
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-}
-
 export interface AuthProfile {
   id: string;
   email: string;
   name: string | null;
   role: Role;
-}
-
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  name?: string | null;
-  role: Role;
-  exp?: number;
-  iat?: number;
 }
 
 export interface City {

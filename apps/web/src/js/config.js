@@ -12,6 +12,7 @@ window.SD = window.SD || {};
   window.SD.config = {
     apiBaseUrl: '__API_BASE_URL__',
     siteUrl: '__SITE_URL__',
+    appUrl: '__APP_URL__',
     defaultCity: '__DEFAULT_CITY__',
     lang: lang,
     langBase: lang === 'en' ? '/en' : '',

@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsIn,
@@ -25,11 +26,15 @@ export class RegisterDto {
   @MaxLength(80)
   name?: string;
 
+  // The site sends 'attendee' | 'organizer'; normalize to the Role enum.
   @ApiPropertyOptional({
     enum: [Role.ATTENDEE, Role.ORGANIZER],
     default: Role.ATTENDEE,
   })
   @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.toUpperCase() : value,
+  )
   @IsIn([Role.ATTENDEE, Role.ORGANIZER])
   role?: Role;
 }

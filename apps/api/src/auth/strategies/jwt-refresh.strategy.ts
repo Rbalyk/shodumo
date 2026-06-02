@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { REFRESH_COOKIE, readCookie } from '../auth.cookies';
 import { JwtPayload } from '../auth.types';
 
 export interface RefreshRequestUser extends JwtPayload {
@@ -16,7 +17,9 @@ export class JwtRefreshStrategy extends PassportStrategy(
 ) {
   constructor(config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) => readCookie(req, REFRESH_COOKIE) ?? null,
+      ]),
       ignoreExpiration: false,
       secretOrKey: config.getOrThrow<string>('JWT_REFRESH_SECRET'),
       passReqToCallback: true,
@@ -24,7 +27,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   }
 
   validate(req: Request, payload: JwtPayload): RefreshRequestUser {
-    const refreshToken = (req.body as { refreshToken?: string })?.refreshToken ?? '';
+    const refreshToken = readCookie(req, REFRESH_COOKIE) ?? '';
     return { ...payload, refreshToken };
   }
 }

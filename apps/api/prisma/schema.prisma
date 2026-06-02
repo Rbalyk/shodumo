@@ -26,15 +26,31 @@ enum AttendanceType {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  name         String?
-  passwordHash String
-  role         Role     @default(ATTENDEE)
-  createdAt    DateTime @default(now())
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  passwordHash    String
+  role            Role      @default(ATTENDEE)
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
 
   organizer Organizer?
   attendance EventAttendee[]
+}
+
+// Holds a signup until the user confirms via the emailed link. The User (and
+// Organizer, if the chosen role is ORGANIZER) is only created on confirmation.
+model PendingRegistration {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         Role     @default(ATTENDEE)
+  token        String   @unique
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  @@index([expiresAt])
 }
 
 model Organizer {

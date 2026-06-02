@@ -1,0 +1,22 @@
+/dist
+/node_modules
+/build
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# OS
+.DS_Store
+
+# Prisma
+prisma/*.db

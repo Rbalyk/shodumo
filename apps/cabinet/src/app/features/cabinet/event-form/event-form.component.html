@@ -1,0 +1,171 @@
+<div class="head">
+  <div>
+    <a class="back" routerLink="/cabinet/events">← {{ 'common.back' | t }}</a>
+    <h1 class="page-title">{{ (isEdit() ? 'form.editTitle' : 'form.createTitle') | t }}</h1>
+  </div>
+  @if (status(); as s) {
+    <span class="status-chip" [attr.data-status]="s">{{ 'status.' + s | t }}</span>
+  }
+</div>
+
+@if (loading()) {
+  <app-state-panel mode="loading" />
+} @else {
+  <div class="layout">
+    <form class="form" [formGroup]="form" (ngSubmit)="save(true)">
+      <!-- Basics -->
+      <section class="card sec">
+        <h2 class="sec-title">{{ 'form.secBasic' | t }}</h2>
+
+        <div class="field">
+          <label class="label" for="title">{{ 'form.title' | t }}</label>
+          <input id="title" class="control" type="text" formControlName="title" />
+          @if (invalid('title')) { <p class="err">{{ 'common.required' | t }}</p> }
+        </div>
+
+        <div class="field">
+          <label class="label" for="titleEn">{{ 'form.titleEn' | t }}</label>
+          <input id="titleEn" class="control" type="text" formControlName="titleEn" />
+          <p class="hint muted">{{ 'form.enHint' | t }}</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="categoryId">{{ 'form.category' | t }}</label>
+            <select id="categoryId" class="control" formControlName="categoryId">
+              <option value="" disabled></option>
+              @for (c of categories(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select>
+            @if (invalid('categoryId')) { <p class="err">{{ 'common.required' | t }}</p> }
+          </div>
+
+          <div class="field">
+            <label class="label" for="cityId">{{ 'form.city' | t }}</label>
+            <select id="cityId" class="control" formControlName="cityId">
+              <option value="" disabled></option>
+              @for (c of cities(); track c.id) {
+                <option [value]="c.id">{{ c.name }}</option>
+              }
+            </select>
+            @if (invalid('cityId')) { <p class="err">{{ 'common.required' | t }}</p> }
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="description">{{ 'form.description' | t }}</label>
+          <textarea id="description" class="control" rows="5" formControlName="description"></textarea>
+          @if (invalid('description')) { <p class="err">{{ 'common.required' | t }}</p> }
+        </div>
+
+        <div class="field">
+          <label class="label" for="descriptionEn">{{ 'form.descriptionEn' | t }}</label>
+          <textarea id="descriptionEn" class="control" rows="4" formControlName="descriptionEn"></textarea>
+          <p class="hint muted">{{ 'form.enHint' | t }}</p>
+        </div>
+      </section>
+
+      <!-- When -->
+      <section class="card sec">
+        <h2 class="sec-title">{{ 'form.secWhen' | t }}</h2>
+        <div class="field">
+          <label class="label" for="startsAt">{{ 'form.startsAt' | t }}</label>
+          <input id="startsAt" class="control" type="datetime-local" formControlName="startsAt" />
+          @if (invalid('startsAt')) { <p class="err">{{ 'common.required' | t }}</p> }
+        </div>
+      </section>
+
+      <!-- Where -->
+      <section class="card sec">
+        <h2 class="sec-title">{{ 'form.secWhere' | t }}</h2>
+        <p class="hint muted">{{ 'form.pickOnMap' | t }}</p>
+        <app-map-picker [lat]="form.controls.lat.value" [lng]="form.controls.lng.value" (pointChange)="onPoint($event)" />
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="label" for="lat">Lat</label>
+            <input id="lat" class="control" type="number" step="any" formControlName="lat" />
+          </div>
+          <div class="field">
+            <label class="label" for="lng">Lng</label>
+            <input id="lng" class="control" type="number" step="any" formControlName="lng" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="address">{{ 'form.address' | t }}</label>
+          <input id="address" class="control" type="text" formControlName="address" />
+        </div>
+      </section>
+
+      <!-- Price -->
+      <section class="card sec">
+        <h2 class="sec-title">{{ 'form.secPrice' | t }}</h2>
+        <label class="toggle">
+          <input type="checkbox" formControlName="isPaid" />
+          <span>{{ 'form.isPaid' | t }}</span>
+        </label>
+        @if (form.controls.isPaid.value) {
+          <div class="field">
+            <label class="label" for="price">{{ 'form.price' | t }}</label>
+            <input id="price" class="control" type="number" min="0" step="1" formControlName="price" />
+            @if (invalid('price')) { <p class="err">{{ 'common.required' | t }}</p> }
+          </div>
+        }
+      </section>
+
+      <!-- Media -->
+      <section class="card sec">
+        <h2 class="sec-title">{{ 'form.secMedia' | t }}</h2>
+        <div class="field">
+          <label class="label" for="coverImage">{{ 'form.cover' | t }} (URL)</label>
+          <input id="coverImage" class="control" type="text" formControlName="coverImage" />
+        </div>
+        <label class="upload">
+          <input type="file" accept="image/*" (change)="onFile($any($event.target).files)" />
+          <span class="muted">{{ 'form.uploadHint' | t }}</span>
+        </label>
+      </section>
+
+      <div class="actions">
+        <button class="btn btn--soft" type="button" [disabled]="busy()" (click)="save(false)">
+          {{ 'form.saveDraft' | t }}
+        </button>
+        <button class="btn btn--grad" type="submit" [disabled]="busy()">
+          {{ busy() ? ('common.saving' | t) : ('form.submit' | t) }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Live preview -->
+    <aside class="preview">
+      <div class="card preview-card">
+        <span class="preview-label muted">{{ 'common.preview' | t }}</span>
+        <div class="cover" [class.is-empty]="!preview().coverImage">
+          @if (preview().coverImage) {
+            <img [src]="preview().coverImage" alt="" />
+          }
+        </div>
+        <div class="meta">
+          @if (categoryName()) { <span class="tag">{{ categoryName() }}</span> }
+          @if (cityName()) { <span class="tag tag--soft">{{ cityName() }}</span> }
+        </div>
+        <h3 class="preview-title">{{ preview().title || ('form.title' | t) }}</h3>
+        @if (preview().startsAt) {
+          <p class="preview-date">{{ preview().startsAt | date: 'dd MMM yyyy, HH:mm' }}</p>
+        }
+        @if (preview().description) {
+          <p class="preview-desc">{{ preview().description }}</p>
+        }
+        <div class="preview-foot">
+          @if (preview().isPaid) {
+            <strong>{{ preview().price ?? 0 }} ₴</strong>
+          } @else {
+            <strong class="free">Free</strong>
+          }
+        </div>
+      </div>
+    </aside>
+  </div>
+}

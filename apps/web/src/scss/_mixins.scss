@@ -1,0 +1,51 @@
+@use 'variables' as *;
+
+@mixin from($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin until($bp) {
+  @media (max-width: $bp - 1px) {
+    @content;
+  }
+}
+
+@mixin container($max: $container) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: 18px;
+
+  @include from($bp-md) {
+    padding-inline: 40px;
+  }
+}
+
+@mixin card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
+}
+
+@mixin focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft-2);
+}
+
+@mixin line-clamp($lines) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@mixin no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

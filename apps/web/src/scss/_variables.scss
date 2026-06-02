@@ -1,0 +1,19 @@
+// SCSS-level constants (breakpoints + layout sizes).
+// Visual/theme tokens live as CSS custom properties in _tokens.scss
+// so the design's light/dark theming works at runtime.
+
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+$header-h: 74px;
+$header-h-mobile: 60px;
+$tabbar-h: 64px;
+$container: 1280px;
+$content: 1180px;
+
+$z-header: 9999;
+$z-tabbar: 60;
+$z-toast: 200;
+$z-modal: 300;

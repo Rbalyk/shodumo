@@ -1,0 +1,277 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.feed {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 16px 18px 40px;
+
+  @include from($bp-md) {
+    padding: 28px 40px 56px;
+  }
+}
+
+// ---------- filter row + view toggle ----------
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+
+  @include until($bp-md) {
+    overflow-x: auto;
+    @include no-scrollbar;
+  }
+
+  @include from($bp-md) {
+    flex-wrap: wrap;
+  }
+  span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.view-toggle {
+  margin-left: auto;
+  display: none;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface-2);
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+
+  @include from($bp-md) {
+    display: flex;
+  }
+
+  button,a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-2);
+
+    &.is-active {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: var(--shadow-card);
+    }
+    span{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+// ---------- layout: sidebar + grid ----------
+.feed__layout {
+  display: flex;
+  gap: 28px;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(#{$header-h} + 24px);
+  align-self: flex-start;
+  display: none;
+
+  @include from($bp-lg) {
+    display: block;
+  }
+
+  &__card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 20px;
+  }
+
+  &__section {
+    margin-bottom: 22px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    font-size: 14.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--ink-2);
+
+    &.is-active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      align-items: flex-start;
+    }
+  }
+}
+
+.feed__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+
+    @include from($bp-md) {
+      font-size: 22px;
+    }
+  }
+
+  .feed__count {
+    font-size: 14.5px;
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+
+  @include from($bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  @include from($bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ---------- event card ----------
+.event-card {
+  background: var(--surface);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  width: 100%;
+
+  &__cover {
+    position: relative;
+    height: 156px;
+  }
+
+  &__cat {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+
+  &__heart {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  &__body {
+    padding: 14px 16px 16px;
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  &__date {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__price {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 12.5px;
+
+    &.is-free {
+      color: var(--free);
+    }
+  }
+
+  &__title {
+    font-size: 17.5px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.22;
+    margin: 0 0 12px;
+    text-wrap: pretty;
+    @include line-clamp(2);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  &__place {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__going {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+}

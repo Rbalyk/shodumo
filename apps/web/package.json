@@ -1,0 +1,31 @@
+{
+  "name": "shodumo-web",
+  "version": "0.1.0",
+  "description": "ShoDumo public site — static, SEO-first afisha of micro-events in Lviv",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "gulp",
+    "build": "gulp build",
+    "prerender": "gulp prerender",
+    "clean": "gulp clean"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.29.3",
+    "del": "^6.1.1",
+    "dotenv": "^16.4.5",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-file-include": "^2.3.0",
+    "gulp-htmlmin": "^5.0.1",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-replace": "^1.1.4",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-terser": "^2.1.0",
+    "sass": "^1.79.4"
+  }
+}

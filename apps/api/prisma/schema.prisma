@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ATTENDEE
+  ORGANIZER
+  ADMIN
+}
+
+enum EventStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  ARCHIVED
+}
+
+enum AttendanceType {
+  GOING
+  SAVED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(ATTENDEE)
+  createdAt    DateTime @default(now())
+
+  organizer Organizer?
+  attendance EventAttendee[]
+}
+
+model Organizer {
+  id     String  @id @default(cuid())
+  userId String  @unique
+  name   String
+  bio    String?
+  bioEn  String?
+  avatar String?
+  links  Json?
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events Event[]
+}
+
+model City {
+  id     String  @id @default(cuid())
+  name   String
+  nameEn String?
+  slug   String  @unique
+
+  events Event[]
+}
+
+model Category {
+  id     String  @id @default(cuid())
+  name   String
+  nameEn String?
+  slug   String  @unique
+
+  events Event[]
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  organizerId String
+  cityId      String
+  categoryId  String
+  title       String
+  titleEn     String?
+  slug        String      @unique
+  description String
+  descriptionEn String?
+  startsAt    DateTime
+  address     String?
+  lat         Float?
+  lng         Float?
+  coverImage  String?
+  isPaid      Boolean     @default(false)
+  price       Decimal?    @db.Decimal(10, 2)
+  status      EventStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+
+  organizer Organizer @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  city      City      @relation(fields: [cityId], references: [id])
+  category  Category  @relation(fields: [categoryId], references: [id])
+
+  attendees EventAttendee[]
+  media     Media[]
+
+  @@index([lat, lng])
+  @@index([status])
+  @@index([slug])
+  @@index([cityId])
+  @@index([startsAt])
+}
+
+model EventAttendee {
+  id      String         @id @default(cuid())
+  eventId String
+  userId  String
+  type    AttendanceType
+  createdAt DateTime     @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId, type])
+  @@index([userId])
+}
+
+model Media {
+  id        String @id @default(cuid())
+  eventId   String
+  url       String
+  sortOrder Int    @default(0)
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="@@htmlLang">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>@@title</title>
+    <meta name="description" content="@@desc" />
+    <meta name="robots" content="@@robots" />
+    <link rel="canonical" href="__SITE_URL__@@langBase@@path" />
+
+    <!-- hreflang alternates -->
+    <link rel="alternate" hreflang="uk" href="__SITE_URL__@@path" />
+    <link rel="alternate" hreflang="en" href="__SITE_URL__/en@@path" />
+    <link rel="alternate" hreflang="x-default" href="__SITE_URL__@@path" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Shodumo" />
+    <meta property="og:title" content="@@title" />
+    <meta property="og:description" content="@@desc" />
+    <meta property="og:url" content="__SITE_URL__@@langBase@@path" />
+    <meta property="og:locale" content="@@ogLocale" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#7c3aed" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/css/main.css" />
+
+    <!-- avoid theme flash: set data-theme before paint -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('sd_theme');
+          if (t !== 'light' && t !== 'dark') t = 'light';
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+    <!--I18N_DATA-->
+    <!--HEAD_EXTRA-->
+  </head>
+  <body>

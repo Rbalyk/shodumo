@@ -1,0 +1,55 @@
+@@include('head.html', {
+  "title": "@@t.meta.home.title",
+  "desc": "@@t.meta.home.desc",
+  "path": "/"
+})
+
+@@include('header.html')
+
+<main class="feed">
+  <div class="filter-row" data-filter-chips>
+    <button class="chip is-active" type="button" data-cat="">
+      <span data-icon="sparkles" data-size="16"></span> @@t.filter.all
+    </button>
+    <button class="chip" type="button" data-cat="забіги"><span data-icon="run" data-size="16"></span> @@t.filter.runs</button>
+    <button class="chip" type="button" data-cat="дегустації"><span data-icon="wine" data-size="16"></span> @@t.filter.tastings</button>
+    <button class="chip" type="button" data-cat="воркшопи"><span data-icon="workshop" data-size="16"></span> @@t.filter.workshops</button>
+    <button class="chip" type="button" data-cat="музика"><span data-icon="music" data-size="16"></span> @@t.filter.music</button>
+    <button class="chip" type="button" data-cat="маркети"><span data-icon="market" data-size="16"></span> @@t.filter.markets</button>
+
+    <div class="view-toggle">
+      <button type="button" class="is-active"><span data-icon="list" data-size="16"></span> @@t.view.list</button>
+      <a href="@@langBase/map.html"><span data-icon="map" data-size="16"></span> @@t.view.map</a>
+    </div>
+  </div>
+
+  <div class="feed__layout">
+    <aside class="sidebar">
+      <div class="sidebar__card">
+        <div class="sidebar__section">
+          <div class="sidebar__title">@@t.sidebar.categories</div>
+          <div data-cat-list data-dynamic>
+            <button class="sidebar__row is-active" data-cat=""><span data-icon="sparkles" data-size="18"></span><span>@@t.sidebar.allEvents</span></button>
+          </div>
+        </div>
+        <div class="sidebar__section">
+          <div class="sidebar__title">@@t.sidebar.city</div>
+          <button class="sidebar__row is-active" type="button" data-city-toggle><span data-icon="pin" data-size="18"></span><span data-city-name>@@t.city.lviv</span></button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="feed__main">
+      <div class="feed__head">
+        <h2>@@t.feed.heading</h2>
+        <span class="feed__count" data-feed-count></span>
+      </div>
+      <div class="grid" data-feed-grid>
+        <!-- skeletons / cards injected by JS; prerender may inline initial cards here -->
+      </div>
+    </div>
+  </div>
+</main>
+
+@@include('tabbar.html', { "feedActive": "is-active", "mapActive": "", "savedActive": "", "profileActive": "" })
+@@include('footer.html')

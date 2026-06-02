@@ -1,0 +1,149 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: $z-modal;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--scrim);
+  backdrop-filter: blur(3px);
+  padding: 0;
+
+  &[aria-hidden='false'] {
+    display: flex;
+  }
+
+  @include from($bp-md) {
+    align-items: center;
+    padding: 24px;
+  }
+
+  &__dialog {
+    position: relative;
+    width: 100%;
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    padding: 26px 24px 28px;
+    box-shadow: var(--shadow-pop);
+    animation: sd-pop-in 0.42s cubic-bezier(0.22, 0.7, 0.3, 1) both;
+
+    @include from($bp-md) {
+      width: 420px;
+      max-width: 100%;
+      border-radius: var(--r-xl);
+    }
+  }
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  &__hint {
+    font-size: 14px;
+    color: var(--ink-2);
+    margin: 5px 0 0;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &__close {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 5px;
+    padding: 5px;
+    background: var(--surface-2);
+    border-radius: var(--r-md);
+    margin-bottom: 20px;
+
+    button {
+      flex: 1;
+      height: 42px;
+      border-radius: var(--r-sm);
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink-2);
+      transition: all 0.22s ease;
+
+      &.is-active {
+        background: var(--surface);
+        color: var(--ink);
+        box-shadow: var(--shadow-card);
+      }
+    }
+  }
+
+  &__forgot {
+    text-align: right;
+    margin-top: 10px;
+
+    button {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+  }
+
+  &__submit {
+    width: 100%;
+    height: 54px;
+    margin-top: 18px;
+    border-radius: var(--r-pill);
+    font-size: 16.5px;
+    font-weight: 800;
+    background: var(--grad);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s ease;
+
+    &:disabled {
+      background: var(--surface-3);
+      color: var(--ink-3);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+  }
+
+  &__legal {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    text-align: center;
+    margin: 14px 0 0;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+}
+
+.modal__field[hidden] {
+  display: none;
+}

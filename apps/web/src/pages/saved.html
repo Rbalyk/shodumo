@@ -1,0 +1,21 @@
+@@include('head.html', {
+  "title": "@@t.meta.saved.title",
+  "desc": "@@t.meta.saved.desc",
+  "path": "/saved.html",
+  "robots": "noindex, nofollow"
+})
+
+@@include('header.html')
+
+<main class="account-page">
+  <div class="account-page__inner">
+    <div class="account-page__head">
+      <h1>@@t.page.saved.title</h1>
+      <span class="feed__count" data-saved-count></span>
+    </div>
+    <div class="grid" data-saved-grid></div>
+  </div>
+</main>
+
+@@include('tabbar.html', { "feedActive": "", "mapActive": "", "savedActive": "is-active", "profileActive": "" })
+@@include('footer.html')

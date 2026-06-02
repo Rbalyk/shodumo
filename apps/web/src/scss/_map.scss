@@ -1,0 +1,142 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.map-page {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 16px 18px 40px;
+
+  @include from($bp-md) {
+    padding: 24px 40px 48px;
+  }
+
+  &__toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0;
+      margin-right: auto;
+    }
+  }
+}
+
+#map {
+  width: 100%;
+  height: calc(100vh - #{$header-h} - 150px);
+  min-height: 380px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+
+  @include until($bp-md) {
+    height: calc(100vh - #{$tabbar-h} - 200px);
+  }
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: var(--r-md);
+}
+
+// custom accent pin marker
+.sd-marker {
+  background: transparent;
+  border: 0;
+}
+
+.sd-pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+  color: #fff;
+
+  svg {
+    transform: rotate(45deg);
+  }
+}
+
+.map-popup {
+  width: 210px;
+
+  &__cover {
+    height: 96px;
+    border-radius: var(--r-sm);
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  &__title {
+    font-weight: 800;
+    font-size: 14.5px;
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
+
+  &__date {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+}
+
+// ---------- mini map markers (event detail) ----------
+.mini-map .leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+// ---------- toaster ----------
+.toaster {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: $z-toast;
+  padding: 18px;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+.toast {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: var(--r-pill);
+  padding: 12px 20px;
+  font-size: 14.5px;
+  font-weight: 700;
+  box-shadow: var(--shadow-pop);
+  animation: sd-toast-in 0.4s cubic-bezier(0.22, 0.7, 0.3, 1) both;
+
+  &__icon {
+    color: var(--accent-3);
+    display: grid;
+    place-items: center;
+  }
+}

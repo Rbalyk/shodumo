@@ -1,0 +1,73 @@
+// ===========================================================
+//  ShoDumo — design tokens (ported from design ds.css)
+//  Manrope, accent gradient, light/dark themes
+// ===========================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font: 'Manrope', system-ui, -apple-system, sans-serif;
+
+  // accent gradient (purple → magenta → orange)
+  --accent: #7c3aed;
+  --accent-2: #d6259a;
+  --accent-3: #ff5436;
+  --accent-ink: #ffffff;
+  --grad: linear-gradient(115deg, var(--accent) 0%, var(--accent-2) 55%, var(--accent-3) 100%);
+
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --r-pill: 999px;
+}
+
+// ---------- light (default) ----------
+:root,
+[data-theme='light'] {
+  --bg: #f5f4f9;
+  --surface: #ffffff;
+  --surface-2: #f0eef6;
+  --surface-3: #e9e6f1;
+  --ink: #181527;
+  --ink-2: #6a6480;
+  --ink-3: #9893a8;
+  --line: #eae7f1;
+  --line-2: #e0dcec;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --accent-soft-2: color-mix(in srgb, var(--accent) 20%, transparent);
+  --free: #0f9d6b;
+  --free-soft: #dff5ec;
+  --shadow-card: 0 1px 2px rgba(24, 21, 39, 0.04), 0 8px 24px rgba(24, 21, 39, 0.06);
+  --shadow-pop: 0 12px 28px rgba(24, 21, 39, 0.1), 0 4px 10px rgba(24, 21, 39, 0.06);
+  --scrim: rgba(20, 17, 33, 0.45);
+}
+
+// ---------- dark ----------
+[data-theme='dark'] {
+  --bg: #0d0b13;
+  --surface: #17141f;
+  --surface-2: #221d2e;
+  --surface-3: #2a2438;
+  --ink: #f4f2fa;
+  --ink-2: #a59eb8;
+  --ink-3: #756e87;
+  --line: #272132;
+  --line-2: #322b40;
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, transparent);
+  --accent-soft-2: color-mix(in srgb, var(--accent) 32%, transparent);
+  --free: #34d399;
+  --free-soft: rgba(16, 157, 107, 0.18);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --scrim: rgba(0, 0, 0, 0.6);
+}
+
+// gradient text helper
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}

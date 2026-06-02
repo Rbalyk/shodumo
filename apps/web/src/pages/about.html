@@ -1,0 +1,25 @@
+@@include('head.html', {
+  "title": "@@t.meta.about.title",
+  "desc": "@@t.meta.about.desc",
+  "path": "/about.html"
+})
+
+@@include('header.html')
+
+<main class="static-page">
+  <div class="static-page__inner">
+    <h1 class="grad-text">Shodumo</h1>
+    <p class="static-page__lead">@@t.about.lead</p>
+    <h2>@@t.about.howTitle</h2>
+    <p>@@t.about.howText</p>
+    <h2>@@t.about.orgTitle</h2>
+    <p>@@t.about.orgText</p>
+    <div class="static-page__cta">
+      <a class="btn btn--grad" href="@@langBase/">@@t.about.ctaEvents</a>
+      <a class="btn btn--soft" href="@@langBase/map.html">@@t.about.ctaMap</a>
+    </div>
+  </div>
+</main>
+
+@@include('tabbar.html', { "feedActive": "", "mapActive": "", "savedActive": "", "profileActive": "" })
+@@include('footer.html')

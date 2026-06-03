@@ -1,0 +1,54 @@
+<div class="head">
+  <h1 class="page-title">{{ 'events.title' | t }}</h1>
+  <a class="btn btn-grad" routerLink="/cabinet/events/new">{{ 'events.new' | t }}</a>
+</div>
+
+<div class="filters">
+  <button class="chip" [class.is-active]="filter() === null" type="button" (click)="setFilter(null)">
+    {{ 'common.all' | t }}
+  </button>
+  @for (s of statuses; track s) {
+    <button class="chip" [class.is-active]="filter() === s" type="button" (click)="setFilter(s)">
+      {{ 'status.' + s | t }}
+    </button>
+  }
+</div>
+
+@switch (store.state()) {
+  @case ('loading') { <app-state-panel mode="loading" /> }
+  @case ('error') { <app-state-panel mode="error" (retry)="store.load(true)" /> }
+  @default {
+    @if (visible().length === 0) {
+      <app-state-panel mode="empty" />
+    } @else {
+      <div class="card tbl-wrap" @fadeIn>
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>{{ 'events.colTitle' | t }}</th>
+              <th>{{ 'events.colStatus' | t }}</th>
+              <th>{{ 'events.colDate' | t }}</th>
+              <th class="num">{{ 'events.colGoing' | t }}</th>
+              <th class="actions">{{ 'events.colActions' | t }}</th>
+            </tr>
+          </thead>
+          <tbody @fadeStagger>
+            @for (e of visible(); track e.id) {
+              <tr>
+                <td class="title">{{ e.title }}</td>
+                <td><app-status-badge [status]="e.status" /></td>
+                <td>{{ e.startsAt | date: 'dd MMM yyyy, HH:mm' }}</td>
+                <td class="num">{{ goingOf(e) }}</td>
+                <td class="actions">
+                  <a class="btn btn-soft btn-sm" [routerLink]="['/cabinet/events', e.id, 'edit']">{{ 'common.edit' | t }}</a>
+                  <a class="btn btn-ghost btn-sm" [href]="publicUrl(e)" target="_blank" rel="noopener">↗</a>
+                  <button class="btn btn-ghost btn-sm danger" type="button" (click)="remove(e)">{{ 'common.delete' | t }}</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+}

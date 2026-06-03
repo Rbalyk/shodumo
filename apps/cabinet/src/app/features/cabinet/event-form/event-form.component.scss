@@ -55,11 +55,7 @@
   margin-bottom: 14px;
 }
 
-.field { margin-bottom: 14px; }
-.field:last-child { margin-bottom: 0; }
-.label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
 .hint { font-size: 12px; margin-top: 5px; }
-.err { font-size: 12px; color: var(--danger); margin-top: 5px; }
 
 .grid-2 {
   display: grid;
@@ -68,16 +64,7 @@
 }
 @media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
 
-.toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 14px;
-}
-.toggle input { width: 16px; height: 16px; }
+.price-field { display: block; margin-top: 12px; }
 
 .upload {
   display: block;
@@ -132,7 +119,7 @@
   background: var(--ink);
   color: #fff;
 }
-.tag--soft { background: var(--surface-2); color: var(--ink-2); }
+.tag.soft { background: var(--surface-2); color: var(--ink-2); }
 
 .preview-title { font-size: 17px; font-weight: 800; line-height: 1.25; }
 .preview-date { font-size: 13px; color: var(--ink-3); margin-top: 4px; }

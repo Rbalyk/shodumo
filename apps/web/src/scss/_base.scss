@@ -12,6 +12,12 @@
   display: none !important;
 }
 
+// class-based hide (used by the event-card template where a bare boolean
+// attribute can't survive the <template> innerHTML round-trip)
+.is-hidden {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;

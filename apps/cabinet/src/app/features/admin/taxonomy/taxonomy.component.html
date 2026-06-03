@@ -1,0 +1,84 @@
+<h1 class="page-title">{{ 'tax.title' | t }}</h1>
+<p class="note muted">{{ 'tax.noDeactivate' | t }}</p>
+
+<div class="cols">
+  <!-- Cities -->
+  <section class="card col">
+    <h2 class="sec-title">{{ 'tax.cities' | t }}</h2>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>{{ 'tax.name' | t }}</th>
+          <th>{{ 'tax.nameEn' | t }}</th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of cities(); track c.id) {
+          <tr>
+            <td class="name">{{ c.name }}</td>
+            <td class="muted">{{ c.nameEn || '—' }}</td>
+            <td class="actions">
+              <button class="btn btn-ghost btn-sm" type="button" (click)="edit('city', c)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-ghost btn-sm danger" type="button" (click)="remove('city', c)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <form class="add" [formGroup]="cityForm" (ngSubmit)="submit('city')">
+      <input class="control" type="text" formControlName="name" [placeholder]="i18n.t('tax.name')" />
+      <input class="control" type="text" formControlName="nameEn" [placeholder]="i18n.t('tax.nameEn')" />
+      <input class="control" type="text" formControlName="slug" [placeholder]="i18n.t('tax.slug')" />
+      <div class="add-actions">
+        @if (editingCity()) {
+          <button class="btn btn-ghost btn-sm" type="button" (click)="cancel('city')">{{ 'common.cancel' | t }}</button>
+        }
+        <button class="btn btn-grad btn-sm" type="submit" [disabled]="cityForm.invalid">
+          {{ (editingCity() ? 'common.save' : 'tax.add') | t }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Categories -->
+  <section class="card col">
+    <h2 class="sec-title">{{ 'tax.categories' | t }}</h2>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>{{ 'tax.name' | t }}</th>
+          <th>{{ 'tax.nameEn' | t }}</th>
+          <th class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of categories(); track c.id) {
+          <tr>
+            <td class="name">{{ c.name }}</td>
+            <td class="muted">{{ c.nameEn || '—' }}</td>
+            <td class="actions">
+              <button class="btn btn-ghost btn-sm" type="button" (click)="edit('category', c)">{{ 'common.edit' | t }}</button>
+              <button class="btn btn-ghost btn-sm danger" type="button" (click)="remove('category', c)">{{ 'common.delete' | t }}</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <form class="add" [formGroup]="categoryForm" (ngSubmit)="submit('category')">
+      <input class="control" type="text" formControlName="name" [placeholder]="i18n.t('tax.name')" />
+      <input class="control" type="text" formControlName="nameEn" [placeholder]="i18n.t('tax.nameEn')" />
+      <input class="control" type="text" formControlName="slug" [placeholder]="i18n.t('tax.slug')" />
+      <div class="add-actions">
+        @if (editingCategory()) {
+          <button class="btn btn-ghost btn-sm" type="button" (click)="cancel('category')">{{ 'common.cancel' | t }}</button>
+        }
+        <button class="btn btn-grad btn-sm" type="submit" [disabled]="categoryForm.invalid">
+          {{ (editingCategory() ? 'common.save' : 'tax.add') | t }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,75 @@
+:host {
+  display: block;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  gap: 12px;
+}
+.page-title {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.chip {
+  border: 0;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: 13.5px;
+
+  &.is-active {
+    background: var(--ink);
+    color: #fff;
+  }
+}
+
+.tbl-wrap {
+  overflow-x: auto;
+}
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    text-align: left;
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink-3);
+  }
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .title {
+    font-weight: 700;
+  }
+}
+.num {
+  text-align: right;
+}
+.actions {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.danger {
+  color: var(--danger);
+}

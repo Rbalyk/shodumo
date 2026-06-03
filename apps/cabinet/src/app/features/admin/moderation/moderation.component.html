@@ -1,0 +1,41 @@
+<h1 class="page-title">{{ 'mod.title' | t }}</h1>
+
+@switch (state()) {
+  @case ('loading') { <app-state-panel mode="loading" /> }
+  @case ('error') { <app-state-panel mode="error" (retry)="load()" /> }
+  @default {
+    @if (queue().length === 0) {
+      <app-state-panel mode="empty" [message]="i18n.t('mod.empty')" />
+    } @else {
+      <div class="grid" @fadeStagger>
+        @for (e of queue(); track e.id) {
+          <article class="card item">
+            <div class="cover" [class.is-empty]="!e.coverImage">
+              @if (e.coverImage) { <img [src]="e.coverImage" alt="" /> }
+            </div>
+            <div class="body">
+              <div class="meta">
+                @if (e.category?.name) { <span class="tag">{{ e.category?.name }}</span> }
+                @if (e.city?.name) { <span class="tag soft">{{ e.city?.name }}</span> }
+              </div>
+              <h3 class="item-title">{{ e.title }}</h3>
+              <p class="item-date">{{ e.startsAt | date: 'dd MMM yyyy, HH:mm' }}</p>
+              @if (e.organizer?.name) {
+                <p class="item-by">{{ 'mod.by' | t }}: <strong>{{ e.organizer?.name }}</strong></p>
+              }
+              <p class="item-desc">{{ e.description }}</p>
+              <div class="actions">
+                <button class="btn btn-grad btn-sm" type="button" [disabled]="busyId() === e.id" (click)="approve(e)">
+                  {{ 'mod.approve' | t }}
+                </button>
+                <button class="btn btn-soft btn-sm danger" type="button" [disabled]="busyId() === e.id" (click)="reject(e)">
+                  {{ 'mod.reject' | t }}
+                </button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+}

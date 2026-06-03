@@ -1,0 +1,29 @@
+@if (confirm.active(); as req) {
+  <div class="overlay" (click)="cancel()">
+    <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <p class="msg">{{ req.message }}</p>
+
+      @if (req.withReason) {
+        <div class="field">
+          <label class="label">{{ req.reasonLabel || 'Причина' }}</label>
+          <textarea class="control" rows="3" [ngModel]="reason()" (ngModelChange)="reason.set($event)"></textarea>
+        </div>
+      }
+
+      <div class="actions">
+        <button class="btn btn-ghost" type="button" (click)="cancel()">
+          {{ req.cancelLabel || ('common.cancel' | t) }}
+        </button>
+        <button
+          class="btn"
+          [class.btn-danger]="req.danger"
+          [class.btn-grad]="!req.danger"
+          type="button"
+          (click)="ok()"
+        >
+          {{ req.confirmLabel || ('common.confirm' | t) }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

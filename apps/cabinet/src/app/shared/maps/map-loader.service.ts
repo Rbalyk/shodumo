@@ -24,7 +24,9 @@ export class MapLoaderService {
         return;
       }
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsKey}`;
+      // `places` powers Address autocomplete; geocoding (reverse-geocode on
+      // marker drag) is part of the core JS API, no extra library needed.
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsKey}&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => resolve(true);

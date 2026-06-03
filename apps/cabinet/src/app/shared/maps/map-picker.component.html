@@ -1,0 +1,18 @@
+@if (ready()) {
+  <google-map
+    height="280px"
+    width="100%"
+    [center]="center()"
+    [zoom]="zoom()"
+    (mapClick)="pick($event)"
+  >
+    @if (marker(); as m) {
+      <map-marker [position]="m" [options]="markerOptions" (mapDragend)="dragEnd($event)" />
+    }
+  </google-map>
+  <p class="hint muted">{{ coordsLabel() }}</p>
+} @else {
+  <div class="fallback">
+    <p class="muted">🗺️ Google Maps недоступний (немає API-ключа). Введіть координати вручну нижче.</p>
+  </div>
+}

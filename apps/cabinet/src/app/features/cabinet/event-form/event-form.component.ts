@@ -1,8 +1,27 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  NgZone,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { debounceTime, map } from 'rxjs';
 import { EventsApi } from '../../../core/api/events.api';
 import { ReferenceApi } from '../../../core/api/reference.api';
 import { MediaApi } from '../../../core/api/media.api';
@@ -12,7 +31,10 @@ import { I18nService } from '../../../shared/i18n/i18n.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
 import { StatePanelComponent } from '../../../shared/ui/state-panel/state-panel.component';
-import { MapPickerComponent, LatLng } from '../../../shared/maps/map-picker.component';
+import { MapPickerComponent, LatLng, PickedPoint } from '../../../shared/maps/map-picker.component';
+import { MapLoaderService } from '../../../shared/maps/map-loader.service';
+import { cityCoords } from '../../../shared/maps/city-coords';
+import { fadeIn } from '../../../shared/animations';
 
 function toLocalInput(iso: string | null | undefined): string {
   if (!iso) return '';
@@ -25,10 +47,22 @@ function toLocalInput(iso: string | null | undefined): string {
 @Component({
   selector: 'app-event-form',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, RouterLink, TranslatePipe, StatePanelComponent, MapPickerComponent],
+  imports: [
+    ReactiveFormsModule,
+    DatePipe,
+    RouterLink,
+    TranslatePipe,
+    StatePanelComponent,
+    MapPickerComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-form.component.html',
   styleUrl: './event-form.component.scss',
+  animations: [fadeIn],
 })
 export class EventFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -38,16 +72,25 @@ export class EventFormComponent implements OnInit {
   private readonly store = inject(CabinetEventsStore);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly zone = inject(NgZone);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly mapLoader = inject(MapLoaderService);
   readonly i18n = inject(I18nService);
 
   /** Route param (events/:id/edit) bound via withComponentInputBinding. */
   readonly id = input<string>();
+
+  /** Address <input> host for Google Places Autocomplete (§5). */
+  readonly addressInput = viewChild<ElementRef<HTMLInputElement>>('addressInput');
 
   readonly cities = signal<City[]>([]);
   readonly categories = signal<Category[]>([]);
   readonly loading = signal(true);
   readonly busy = signal(false);
   readonly status = signal<EventModel['status'] | null>(null);
+
+  /** Pan the map to this point on city change, without dropping a marker (§6). */
+  readonly mapRecenter = signal<LatLng | null>(null);
 
   readonly isEdit = computed(() => !!this.id());
 
@@ -67,16 +110,57 @@ export class EventFormComponent implements OnInit {
     price: this.fb.control<number | null>(null),
   });
 
-  // live preview helpers
-  readonly preview = computed(() => this.form.getRawValue());
-  readonly cityName = computed(() => this.cities().find((c) => c.id === this.form.controls.cityId.value)?.name ?? '');
-  readonly categoryName = computed(
-    () => this.categories().find((c) => c.id === this.form.controls.categoryId.value)?.name ?? '',
+  /** Debounced snapshot driving the live preview (§4). */
+  readonly preview = toSignal(
+    this.form.valueChanges.pipe(
+      debounceTime(180),
+      map(() => this.form.getRawValue()),
+    ),
+    { initialValue: this.form.getRawValue() },
   );
+
+  readonly cityName = computed(
+    () => this.cities().find((c) => c.id === this.preview().cityId)?.name ?? '',
+  );
+  readonly categoryName = computed(
+    () => this.categories().find((c) => c.id === this.preview().categoryId)?.name ?? '',
+  );
+
+  constructor() {
+    // Wire up Places Autocomplete once the input exists and the Maps API is ready (§5).
+    effect((onCleanup) => {
+      const host = this.addressInput()?.nativeElement;
+      if (!host) return;
+      let autocomplete: google.maps.places.Autocomplete | null = null;
+      let listener: google.maps.MapsEventListener | null = null;
+
+      void this.mapLoader.load().then((ok) => {
+        if (!ok || typeof google === 'undefined' || !google.maps.places) return;
+        autocomplete = new google.maps.places.Autocomplete(host, {
+          fields: ['geometry', 'formatted_address', 'name'],
+          componentRestrictions: { country: 'ua' },
+        });
+        listener = autocomplete.addListener('place_changed', () => {
+          const place = autocomplete!.getPlace();
+          const loc = place.geometry?.location;
+          this.zone.run(() => {
+            this.form.patchValue({
+              address: place.formatted_address ?? place.name ?? this.form.controls.address.value,
+              ...(loc ? { lat: loc.lat(), lng: loc.lng() } : {}),
+            });
+          });
+        });
+      });
+
+      onCleanup(() => listener?.remove());
+    });
+  }
 
   ngOnInit(): void {
     // keep price validity in sync with the isPaid toggle
-    this.form.controls.isPaid.valueChanges.subscribe((paid) => this.applyPriceValidators(!!paid));
+    this.form.controls.isPaid.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((paid) => this.applyPriceValidators(!!paid));
 
     this.reference.getCities().subscribe((c) => this.cities.set(c));
     this.reference.getCategories().subscribe((c) => this.categories.set(c));
@@ -123,8 +207,20 @@ export class EventFormComponent implements OnInit {
     });
   }
 
-  onPoint(point: LatLng): void {
-    this.form.patchValue({ lat: point.lat, lng: point.lng });
+  /** City select changed → recenter the map to the city's coords (§6). */
+  onCityChange(cityId: string): void {
+    const city = this.cities().find((c) => c.id === cityId);
+    const coords = cityCoords(city?.slug);
+    if (coords) this.mapRecenter.set(coords);
+  }
+
+  /** Map pick/drag → sync coordinates and, when reverse-geocoded, the address (§5). */
+  onPoint(point: PickedPoint): void {
+    this.form.patchValue({
+      lat: point.lat,
+      lng: point.lng,
+      ...(point.address ? { address: point.address } : {}),
+    });
   }
 
   onFile(fileList: FileList | null): void {
@@ -183,10 +279,5 @@ export class EventFormComponent implements OnInit {
         if (err.status === 400) this.form.markAllAsTouched();
       },
     });
-  }
-
-  invalid(name: keyof typeof this.form.controls): boolean {
-    const c = this.form.controls[name];
-    return c.invalid && (c.touched || c.dirty);
   }
 }

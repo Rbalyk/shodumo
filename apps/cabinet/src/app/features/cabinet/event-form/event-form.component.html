@@ -12,116 +12,116 @@
   <app-state-panel mode="loading" />
 } @else {
   <div class="layout">
-    <form class="form" [formGroup]="form" (ngSubmit)="save(true)">
+    <form class="form" [formGroup]="form" (ngSubmit)="save(true)" @fadeIn>
       <!-- Basics -->
       <section class="card sec">
         <h2 class="sec-title">{{ 'form.secBasic' | t }}</h2>
 
-        <div class="field">
-          <label class="label" for="title">{{ 'form.title' | t }}</label>
-          <input id="title" class="control" type="text" formControlName="title" />
-          @if (invalid('title')) { <p class="err">{{ 'common.required' | t }}</p> }
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.title' | t }}</mat-label>
+          <input matInput formControlName="title" />
+          <mat-error>{{ 'common.required' | t }}</mat-error>
+        </mat-form-field>
 
-        <div class="field">
-          <label class="label" for="titleEn">{{ 'form.titleEn' | t }}</label>
-          <input id="titleEn" class="control" type="text" formControlName="titleEn" />
-          <p class="hint muted">{{ 'form.enHint' | t }}</p>
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.titleEn' | t }}</mat-label>
+          <input matInput formControlName="titleEn" />
+          <mat-hint>{{ 'form.enHint' | t }}</mat-hint>
+        </mat-form-field>
 
         <div class="grid-2">
-          <div class="field">
-            <label class="label" for="categoryId">{{ 'form.category' | t }}</label>
-            <select id="categoryId" class="control" formControlName="categoryId">
-              <option value="" disabled></option>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'form.category' | t }}</mat-label>
+            <mat-select formControlName="categoryId">
               @for (c of categories(); track c.id) {
-                <option [value]="c.id">{{ c.name }}</option>
+                <mat-option [value]="c.id">{{ c.name }}</mat-option>
               }
-            </select>
-            @if (invalid('categoryId')) { <p class="err">{{ 'common.required' | t }}</p> }
-          </div>
+            </mat-select>
+            <mat-error>{{ 'common.required' | t }}</mat-error>
+          </mat-form-field>
 
-          <div class="field">
-            <label class="label" for="cityId">{{ 'form.city' | t }}</label>
-            <select id="cityId" class="control" formControlName="cityId">
-              <option value="" disabled></option>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'form.city' | t }}</mat-label>
+            <mat-select formControlName="cityId" (selectionChange)="onCityChange($event.value)">
               @for (c of cities(); track c.id) {
-                <option [value]="c.id">{{ c.name }}</option>
+                <mat-option [value]="c.id">{{ c.name }}</mat-option>
               }
-            </select>
-            @if (invalid('cityId')) { <p class="err">{{ 'common.required' | t }}</p> }
-          </div>
+            </mat-select>
+            <mat-error>{{ 'common.required' | t }}</mat-error>
+          </mat-form-field>
         </div>
 
-        <div class="field">
-          <label class="label" for="description">{{ 'form.description' | t }}</label>
-          <textarea id="description" class="control" rows="5" formControlName="description"></textarea>
-          @if (invalid('description')) { <p class="err">{{ 'common.required' | t }}</p> }
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.description' | t }}</mat-label>
+          <textarea matInput rows="5" formControlName="description"></textarea>
+          <mat-error>{{ 'common.required' | t }}</mat-error>
+        </mat-form-field>
 
-        <div class="field">
-          <label class="label" for="descriptionEn">{{ 'form.descriptionEn' | t }}</label>
-          <textarea id="descriptionEn" class="control" rows="4" formControlName="descriptionEn"></textarea>
-          <p class="hint muted">{{ 'form.enHint' | t }}</p>
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.descriptionEn' | t }}</mat-label>
+          <textarea matInput rows="4" formControlName="descriptionEn"></textarea>
+          <mat-hint>{{ 'form.enHint' | t }}</mat-hint>
+        </mat-form-field>
       </section>
 
       <!-- When -->
       <section class="card sec">
         <h2 class="sec-title">{{ 'form.secWhen' | t }}</h2>
-        <div class="field">
-          <label class="label" for="startsAt">{{ 'form.startsAt' | t }}</label>
-          <input id="startsAt" class="control" type="datetime-local" formControlName="startsAt" />
-          @if (invalid('startsAt')) { <p class="err">{{ 'common.required' | t }}</p> }
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.startsAt' | t }}</mat-label>
+          <input matInput type="datetime-local" formControlName="startsAt" />
+          <mat-error>{{ 'common.required' | t }}</mat-error>
+        </mat-form-field>
       </section>
 
       <!-- Where -->
       <section class="card sec">
         <h2 class="sec-title">{{ 'form.secWhere' | t }}</h2>
         <p class="hint muted">{{ 'form.pickOnMap' | t }}</p>
-        <app-map-picker [lat]="form.controls.lat.value" [lng]="form.controls.lng.value" (pointChange)="onPoint($event)" />
+        <app-map-picker
+          [lat]="form.controls.lat.value"
+          [lng]="form.controls.lng.value"
+          [recenter]="mapRecenter()"
+          (pointChange)="onPoint($event)"
+        />
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.address' | t }}</mat-label>
+          <input #addressInput matInput formControlName="address" autocomplete="off" />
+        </mat-form-field>
 
         <div class="grid-2">
-          <div class="field">
-            <label class="label" for="lat">Lat</label>
-            <input id="lat" class="control" type="number" step="any" formControlName="lat" />
-          </div>
-          <div class="field">
-            <label class="label" for="lng">Lng</label>
-            <input id="lng" class="control" type="number" step="any" formControlName="lng" />
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label" for="address">{{ 'form.address' | t }}</label>
-          <input id="address" class="control" type="text" formControlName="address" />
+          <mat-form-field appearance="outline">
+            <mat-label>Lat</mat-label>
+            <input matInput type="number" step="any" formControlName="lat" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Lng</mat-label>
+            <input matInput type="number" step="any" formControlName="lng" />
+          </mat-form-field>
         </div>
       </section>
 
       <!-- Price -->
       <section class="card sec">
         <h2 class="sec-title">{{ 'form.secPrice' | t }}</h2>
-        <label class="toggle">
-          <input type="checkbox" formControlName="isPaid" />
-          <span>{{ 'form.isPaid' | t }}</span>
-        </label>
+        <mat-slide-toggle formControlName="isPaid">{{ 'form.isPaid' | t }}</mat-slide-toggle>
         @if (form.controls.isPaid.value) {
-          <div class="field">
-            <label class="label" for="price">{{ 'form.price' | t }}</label>
-            <input id="price" class="control" type="number" min="0" step="1" formControlName="price" />
-            @if (invalid('price')) { <p class="err">{{ 'common.required' | t }}</p> }
-          </div>
+          <mat-form-field appearance="outline" class="price-field">
+            <mat-label>{{ 'form.price' | t }}</mat-label>
+            <input matInput type="number" min="0" step="1" formControlName="price" />
+            <mat-error>{{ 'common.required' | t }}</mat-error>
+          </mat-form-field>
         }
       </section>
 
       <!-- Media -->
       <section class="card sec">
         <h2 class="sec-title">{{ 'form.secMedia' | t }}</h2>
-        <div class="field">
-          <label class="label" for="coverImage">{{ 'form.cover' | t }} (URL)</label>
-          <input id="coverImage" class="control" type="text" formControlName="coverImage" />
-        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'form.cover' | t }} (URL)</mat-label>
+          <input matInput formControlName="coverImage" />
+        </mat-form-field>
         <label class="upload">
           <input type="file" accept="image/*" (change)="onFile($any($event.target).files)" />
           <span class="muted">{{ 'form.uploadHint' | t }}</span>
@@ -129,17 +129,17 @@
       </section>
 
       <div class="actions">
-        <button class="btn btn--soft" type="button" [disabled]="busy()" (click)="save(false)">
+        <button class="btn btn-soft" type="button" [disabled]="busy()" (click)="save(false)">
           {{ 'form.saveDraft' | t }}
         </button>
-        <button class="btn btn--grad" type="submit" [disabled]="busy()">
+        <button class="btn btn-grad" type="submit" [disabled]="busy()">
           {{ busy() ? ('common.saving' | t) : ('form.submit' | t) }}
         </button>
       </div>
     </form>
 
     <!-- Live preview -->
-    <aside class="preview">
+    <aside class="preview" @fadeIn>
       <div class="card preview-card">
         <span class="preview-label muted">{{ 'common.preview' | t }}</span>
         <div class="cover" [class.is-empty]="!preview().coverImage">
@@ -149,7 +149,7 @@
         </div>
         <div class="meta">
           @if (categoryName()) { <span class="tag">{{ categoryName() }}</span> }
-          @if (cityName()) { <span class="tag tag--soft">{{ cityName() }}</span> }
+          @if (cityName()) { <span class="tag soft">{{ cityName() }}</span> }
         </div>
         <h3 class="preview-title">{{ preview().title || ('form.title' | t) }}</h3>
         @if (preview().startsAt) {

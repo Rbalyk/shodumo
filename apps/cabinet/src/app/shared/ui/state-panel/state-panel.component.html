@@ -1,0 +1,17 @@
+<div class="panel" [class.inline]="inline()">
+  @switch (mode()) {
+    @case ('loading') {
+      <div class="spin"></div>
+      <p class="text">{{ 'common.loading' | t }}</p>
+    }
+    @case ('empty') {
+      <div class="emoji">📭</div>
+      <p class="text">{{ message() || ('common.empty' | t) }}</p>
+    }
+    @case ('error') {
+      <div class="emoji">⚠️</div>
+      <p class="text">{{ message() || ('common.error' | t) }}</p>
+      <button class="btn btn-soft btn-sm" type="button" (click)="retry.emit()">{{ 'common.retry' | t }}</button>
+    }
+  }
+</div>

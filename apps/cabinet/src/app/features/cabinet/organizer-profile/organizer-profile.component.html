@@ -1,0 +1,64 @@
+<h1 class="page-title">{{ 'profile.title' | t }}</h1>
+
+<div class="layout">
+  <form class="card form" [formGroup]="form" (ngSubmit)="save()" @fadeIn>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'profile.name' | t }}</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error>{{ 'common.required' | t }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'profile.bio' | t }}</mat-label>
+      <textarea matInput rows="4" formControlName="bio"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'profile.bioEn' | t }}</mat-label>
+      <textarea matInput rows="3" formControlName="bioEn"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'profile.avatar' | t }}</mat-label>
+      <input matInput formControlName="avatar" />
+    </mat-form-field>
+
+    <div class="links-block">
+      <span class="links-title">{{ 'profile.links' | t }}</span>
+      <div formArrayName="links" class="links">
+        @for (g of links.controls; track g; let i = $index) {
+          <div class="link-row" [formGroupName]="i">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'profile.linkKey' | t }}</mat-label>
+              <input matInput formControlName="key" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'profile.linkVal' | t }}</mat-label>
+              <input matInput formControlName="val" />
+            </mat-form-field>
+            <button class="btn btn-ghost btn-sm danger" type="button" (click)="removeLink(i)">✕</button>
+          </div>
+        }
+      </div>
+      <button class="btn btn-soft btn-sm" type="button" (click)="addLink()">{{ 'profile.addLink' | t }}</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-grad" type="submit" [disabled]="busy()">
+        {{ busy() ? ('common.saving' | t) : ('common.save' | t) }}
+      </button>
+    </div>
+  </form>
+
+  <aside class="card preview" @fadeIn>
+    <span class="preview-label muted">{{ 'common.preview' | t }}</span>
+    <div class="avatar" [style.background-image]="avatarBg()"></div>
+    <h3 class="preview-name">{{ preview().name || ('profile.name' | t) }}</h3>
+    @if (preview().bio) { <p class="preview-bio">{{ preview().bio }}</p> }
+    <div class="preview-links">
+      @for (l of previewLinks(); track l.key) {
+        <span class="chip">{{ l.key }}</span>
+      }
+    </div>
+  </aside>
+</div>

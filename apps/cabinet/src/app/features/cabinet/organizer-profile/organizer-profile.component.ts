@@ -1,101 +1,26 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { debounceTime, map } from 'rxjs';
 import { OrganizerApi } from '../../../core/api/organizer.api';
 import { AuthService } from '../../../core/auth/auth.service';
 import { OrganizerWritePayload } from '../../../core/models';
 import { I18nService } from '../../../shared/i18n/i18n.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { ToastService } from '../../../shared/ui/toast/toast.service';
+import { fadeIn } from '../../../shared/animations';
 
 @Component({
   selector: 'app-organizer-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <h1 class="page-title">{{ 'profile.title' | t }}</h1>
-
-    <div class="layout">
-      <form class="card form" [formGroup]="form" (ngSubmit)="save()">
-        <div class="field">
-          <label class="label" for="name">{{ 'profile.name' | t }}</label>
-          <input id="name" class="control" type="text" formControlName="name" />
-          @if (invalid('name')) { <p class="err">{{ 'common.required' | t }}</p> }
-        </div>
-
-        <div class="field">
-          <label class="label" for="bio">{{ 'profile.bio' | t }}</label>
-          <textarea id="bio" class="control" rows="4" formControlName="bio"></textarea>
-        </div>
-
-        <div class="field">
-          <label class="label" for="bioEn">{{ 'profile.bioEn' | t }}</label>
-          <textarea id="bioEn" class="control" rows="3" formControlName="bioEn"></textarea>
-        </div>
-
-        <div class="field">
-          <label class="label" for="avatar">{{ 'profile.avatar' | t }}</label>
-          <input id="avatar" class="control" type="text" formControlName="avatar" />
-        </div>
-
-        <div class="field">
-          <span class="label">{{ 'profile.links' | t }}</span>
-          <div formArrayName="links" class="links">
-            @for (g of links.controls; track g; let i = $index) {
-              <div class="link-row" [formGroupName]="i">
-                <input class="control" type="text" formControlName="key" [placeholder]="i18n.t('profile.linkKey')" />
-                <input class="control" type="text" formControlName="val" [placeholder]="i18n.t('profile.linkVal')" />
-                <button class="btn btn--ghost btn--sm danger" type="button" (click)="removeLink(i)">✕</button>
-              </div>
-            }
-          </div>
-          <button class="btn btn--soft btn--sm" type="button" (click)="addLink()">{{ 'profile.addLink' | t }}</button>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn--grad" type="submit" [disabled]="busy()">
-            {{ busy() ? ('common.saving' | t) : ('common.save' | t) }}
-          </button>
-        </div>
-      </form>
-
-      <aside class="card preview">
-        <span class="preview-label muted">{{ 'common.preview' | t }}</span>
-        <div class="avatar" [style.background-image]="avatarBg()"></div>
-        <h3 class="preview-name">{{ preview().name || ('profile.name' | t) }}</h3>
-        @if (preview().bio) { <p class="preview-bio">{{ preview().bio }}</p> }
-        <div class="preview-links">
-          @for (l of previewLinks(); track l.key) {
-            <span class="chip">{{ l.key }}</span>
-          }
-        </div>
-      </aside>
-    </div>
-  `,
-  styles: [
-    `
-      :host { display: block; }
-      .page-title { font-size: 24px; font-weight: 800; margin-bottom: 18px; }
-      .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 20px; align-items: start; }
-      @media (max-width: 880px) { .layout { grid-template-columns: 1fr; } }
-      .form { padding: 22px; }
-      .field { margin-bottom: 16px; }
-      .label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-      .err { font-size: 12px; color: var(--danger); margin-top: 5px; }
-      .links { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
-      .link-row { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; align-items: center; }
-      .danger { color: var(--danger); }
-      .actions { display: flex; justify-content: flex-end; padding-top: 4px; }
-      .preview { padding: 22px; text-align: center; position: sticky; top: 16px; }
-      .preview-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
-      .avatar { width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 12px; background: var(--grad); background-size: cover; background-position: center; }
-      .preview-name { font-size: 17px; font-weight: 800; }
-      .preview-bio { font-size: 13px; color: var(--ink-2); margin-top: 8px; }
-      .preview-links { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
-      .chip { padding: 3px 10px; border-radius: var(--r-pill); font-size: 11.5px; font-weight: 700; background: var(--surface-2); color: var(--ink-2); }
-    `,
-  ],
+  templateUrl: './organizer-profile.component.html',
+  styleUrl: './organizer-profile.component.scss',
+  animations: [fadeIn],
 })
 export class OrganizerProfileComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -114,9 +39,21 @@ export class OrganizerProfileComponent implements OnInit {
     links: this.fb.array<FormGroup>([]),
   });
 
-  readonly preview = computed(() => this.form.getRawValue());
+  /**
+   * Live preview driven by `valueChanges` (debounced ~180ms) — a form value is
+   * not a signal, so the previous `computed(() => form.getRawValue())` never
+   * recomputed. `toSignal` bridges the stream into reactive state.
+   */
+  readonly preview = toSignal(
+    this.form.valueChanges.pipe(
+      debounceTime(180),
+      map(() => this.form.getRawValue()),
+    ),
+    { initialValue: this.form.getRawValue() },
+  );
+
   readonly avatarBg = computed(() => {
-    const a = this.form.controls.avatar.value?.trim();
+    const a = this.preview().avatar?.trim();
     return a ? `url("${a}")` : 'var(--grad)';
   });
   readonly previewLinks = computed(() =>
@@ -176,10 +113,5 @@ export class OrganizerProfileComponent implements OnInit {
         if (err.status === 400) this.form.markAllAsTouched();
       },
     });
-  }
-
-  invalid(name: 'name'): boolean {
-    const c = this.form.controls[name];
-    return c.invalid && (c.touched || c.dirty);
   }
 }

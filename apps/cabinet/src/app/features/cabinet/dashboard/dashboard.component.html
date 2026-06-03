@@ -1,0 +1,51 @@
+<div class="head">
+  <h1 class="page-title">{{ 'dash.title' | t }}</h1>
+  <a class="btn btn-grad" routerLink="/cabinet/events/new">{{ 'dash.newEvent' | t }}</a>
+</div>
+
+@switch (store.state()) {
+  @case ('loading') { <app-state-panel mode="loading" /> }
+  @case ('error') { <app-state-panel mode="error" (retry)="store.load(true)" /> }
+  @default {
+    <div class="tiles" @fadeStagger>
+      <div class="card tile">
+        <span class="tile-label">{{ 'dash.total' | t }}</span>
+        <strong class="tile-value">{{ store.summary().total }}</strong>
+      </div>
+      <div class="card tile">
+        <span class="tile-label">{{ 'dash.published' | t }}</span>
+        <strong class="tile-value pub">{{ store.summary().published }}</strong>
+      </div>
+      <div class="card tile">
+        <span class="tile-label">{{ 'dash.pending' | t }}</span>
+        <strong class="tile-value pend">{{ store.summary().pending }}</strong>
+      </div>
+      <div class="card tile">
+        <span class="tile-label">{{ 'dash.going' | t }}</span>
+        <strong class="tile-value grad">{{ store.summary().going }}</strong>
+      </div>
+    </div>
+
+    <section class="card upcoming" @fadeIn>
+      <h2 class="sec-title">{{ 'dash.upcoming' | t }}</h2>
+      @if (store.upcoming().length === 0) {
+        <app-state-panel mode="empty" [inline]="true" />
+      } @else {
+        <ul class="list" @fadeStagger>
+          @for (e of store.upcoming(); track e.id) {
+            <li class="row">
+              <a class="row-main" [routerLink]="['/cabinet/events', e.id, 'edit']">
+                <span class="row-title">{{ e.title }}</span>
+                <span class="row-date">{{ e.startsAt | date: 'dd MMM yyyy, HH:mm' }}</span>
+              </a>
+              <div class="row-side">
+                <span class="going">{{ goingOf(e) }}</span>
+                <app-status-badge [status]="e.status" />
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+}

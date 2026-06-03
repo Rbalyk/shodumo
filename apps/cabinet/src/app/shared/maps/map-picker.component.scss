@@ -1,0 +1,18 @@
+:host {
+  display: block;
+}
+google-map {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  display: block;
+}
+.hint {
+  margin-top: 8px;
+  font-size: 12.5px;
+}
+.fallback {
+  padding: 18px;
+  border: 1.5px dashed var(--line-2);
+  border-radius: var(--r-md);
+  text-align: center;
+}

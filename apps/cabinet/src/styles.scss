@@ -1,6 +1,31 @@
-/* ShoDumo Cabinet — global design tokens, reset, primitives */
+/* ShoDumo Cabinet — global design tokens, reset, primitives + Material theme */
 
-:root {
+@use '@angular/material' as mat;
+
+/* ---------- Angular Material custom theme ----------
+   Built from the existing brand palette (violet/rose ≈ --accent / --accent-2),
+   NOT the default Material colours. The generated `--mat-sys-*` system variables
+   are then pinned to our exact design tokens below so Material controls blend
+   seamlessly into the cabinet look. */
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$violet-palette,
+        tertiary: mat.$rose-palette,
+      ),
+      typography: (
+        plain-family: ('Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif),
+        brand-family: ('Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif),
+        bold-weight: 800,
+        medium-weight: 600,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
   /* brand */
   --accent: #7c3aed;
   --accent-2: #d6259a;
@@ -42,11 +67,26 @@
   --shadow-pop: 0 16px 48px rgba(24, 21, 39, 0.18);
 
   --container: 1180px;
+
+  /* pin Material system colours to the brand so controls match the cabinet */
+  --mat-sys-primary: var(--accent);
+  --mat-sys-on-primary: #fff;
+  --mat-sys-error: var(--danger);
+  --mat-sys-surface: var(--surface);
+  --mat-sys-on-surface: var(--ink);
+  --mat-sys-on-surface-variant: var(--ink-2);
+  --mat-sys-outline: var(--line-2);
+  --mat-sys-outline-variant: var(--line);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body { height: 100%; }
+html,
+body {
+  height: 100%;
+}
 
 body {
   margin: 0;
@@ -58,13 +98,30 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, p { margin: 0; }
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
 
-a { color: inherit; text-decoration: none; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-button { font-family: inherit; cursor: pointer; }
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
 
-input, select, textarea { font-family: inherit; font-size: 15px; }
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 15px;
+}
 
 .grad-text {
   background: var(--grad);
@@ -74,7 +131,7 @@ input, select, textarea { font-family: inherit; font-size: 15px; }
   color: transparent;
 }
 
-/* ---------- buttons ---------- */
+/* ---------- buttons (flat, multi-class — no BEM) ---------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -89,16 +146,43 @@ input, select, textarea { font-family: inherit; font-size: 15px; }
   white-space: nowrap;
   transition: filter 0.15s ease, background 0.15s ease, opacity 0.15s ease;
 
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
-  &:not(:disabled):hover { filter: brightness(0.97); }
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  &:not(:disabled):hover {
+    filter: brightness(0.97);
+  }
 }
-.btn--grad { background: var(--grad); color: #fff; box-shadow: var(--shadow-card); }
-.btn--soft { background: var(--surface-2); color: var(--ink); }
-.btn--ghost { background: transparent; color: var(--ink-2); }
-.btn--outline { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line-2); color: var(--ink); }
-.btn--danger { background: var(--danger); color: #fff; }
-.btn--sm { padding: 7px 13px; font-size: 13px; }
-.btn--block { width: 100%; }
+.btn-grad {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: var(--shadow-card);
+}
+.btn-soft {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink-2);
+}
+.btn-outline {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1.5px var(--line-2);
+  color: var(--ink);
+}
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+.btn-sm {
+  padding: 7px 13px;
+  font-size: 13px;
+}
+.btn-block {
+  width: 100%;
+}
 
 /* ---------- cards ---------- */
 .card {
@@ -108,11 +192,28 @@ input, select, textarea { font-family: inherit; font-size: 15px; }
   box-shadow: var(--shadow-card);
 }
 
-/* ---------- form controls ---------- */
-.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
-.field__label { font-size: 13px; font-weight: 700; color: var(--ink-2); }
-.field__hint { font-size: 12px; color: var(--ink-3); }
-.field__error { font-size: 12px; color: var(--danger); font-weight: 600; }
+/* ---------- form controls (contextual, no BEM) ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  .label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .hint {
+    font-size: 12px;
+    color: var(--ink-3);
+  }
+  .error {
+    font-size: 12px;
+    color: var(--danger);
+    font-weight: 600;
+  }
+}
 
 .control {
   width: 100%;
@@ -124,23 +225,56 @@ input, select, textarea { font-family: inherit; font-size: 15px; }
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
-  &:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14); }
-  &.is-invalid { border-color: var(--danger); }
+  &:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.14);
+  }
+  &.is-invalid {
+    border-color: var(--danger);
+  }
 }
-textarea.control { resize: vertical; min-height: 96px; }
+textarea.control {
+  resize: vertical;
+  min-height: 96px;
+}
 
 /* ---------- generic helpers ---------- */
-.muted { color: var(--ink-3); }
-.row { display: flex; gap: 12px; }
-.row--wrap { flex-wrap: wrap; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+.muted {
+  color: var(--ink-3);
+}
+.row {
+  display: flex;
+  gap: 12px;
+}
+.row-wrap {
+  flex-wrap: wrap;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 720px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
 
 .spin {
-  width: 22px; height: 22px;
+  width: 22px;
+  height: 22px;
   border: 2.5px solid var(--line-2);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: sd-spin 0.7s linear infinite;
 }
-@keyframes sd-spin { to { transform: rotate(360deg); } }
+@keyframes sd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Material form-field fit-in tweaks ---------- */
+.mat-mdc-form-field {
+  width: 100%;
+}

@@ -60,7 +60,7 @@ npm run clean      # remove dist/
 
 ```
 dist/
-  index.html                  # home feed (client-rendered from API)
+  index.html                  # home feed (static cards pre-rendered, then hydrated)
   map.html                    # Leaflet map of events
   saved.html                  # current user's saved events (auth-gated, noindex)
   profile.html                # current user's profile card (auth-gated, noindex)
@@ -111,6 +111,28 @@ Category slugs are **Cyrillic** (`забіги`, `дегустації`, `вор
 ## Theming
 
 Light/dark themes are CSS custom properties toggled via `data-theme` on `<html>`. **Light is the default**; only an explicit user choice (stored in `localStorage` as `sd_theme`) switches to dark — `prefers-color-scheme` is intentionally ignored. An inline script in `<head>` applies the saved theme before paint to avoid a flash.
+
+## Feed rendering & freshness
+
+The home feed is **pre-rendered for SEO and first paint**: `gulp prerender` fetches
+published events and inlines ready event cards into `dist/index.html` (and
+`dist/en/index.html`). The card markup has a **single source of truth** — the
+`src/pages/partials/event-card.html` template — which is filled with `{{token}}`
+values both by the Node pre-renderer (build time) and by the client (it clones the
+embedded `<template id="event-card-tpl">` at runtime). There are **no card HTML
+strings in the JS bundle**.
+
+On load the client **hydrates** rather than replacing: it keeps the pre-rendered
+cards, attaches interactivity, then silently re-fetches once to reconcile. Filter
+and city changes fetch a subset and re-render only the grid.
+
+Because the static cards are a **build-time snapshot**, they only refresh when the
+site is rebuilt. To keep the pre-rendered feed current on **Cloudflare Pages**,
+configure a **Deploy Hook** (Pages → Settings → Builds & deployments → Deploy hooks)
+and have the API call that hook URL whenever events change (publish/update/delete),
+or trigger it on a schedule (e.g. an hourly cron). Each hook call re-runs the build,
+re-fetches events, and regenerates the inlined feed. _(No code change required —
+this is purely deploy configuration.)_
 
 ## Notes
 

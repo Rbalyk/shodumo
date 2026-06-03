@@ -1,0 +1,31 @@
+<div class="login">
+  <form class="card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="brand">
+      <span class="word">Shodumo</span><span class="dot"></span>
+    </div>
+    <h1 class="title">{{ 'login.title' | t }}</h1>
+    <p class="sub muted">{{ 'login.subtitle' | t }}</p>
+
+    <div class="field">
+      <label class="label" for="email">{{ 'login.email' | t }}</label>
+      <input id="email" class="control" type="email" autocomplete="email" formControlName="email" />
+    </div>
+
+    <div class="field">
+      <label class="label" for="password">{{ 'login.password' | t }}</label>
+      <input id="password" class="control" type="password" autocomplete="current-password" formControlName="password" />
+    </div>
+
+    @if (error()) {
+      <p class="error err">{{ error() }}</p>
+    }
+
+    <button class="btn btn-grad btn-block" type="submit" [disabled]="busy() || form.invalid">
+      {{ (busy() ? 'login.submitting' : 'login.submit') | t }}
+    </button>
+
+    <button class="lang btn btn-ghost btn-sm" type="button" (click)="i18n.toggle()">
+      {{ 'app.lang' | t }}
+    </button>
+  </form>
+</div>

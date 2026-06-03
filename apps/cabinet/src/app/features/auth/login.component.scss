@@ -1,0 +1,49 @@
+.login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 34px 30px;
+  }
+}
+
+.brand {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  margin-bottom: 18px;
+}
+.word {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--grad);
+  margin-bottom: 3px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+}
+.sub {
+  margin-bottom: 22px;
+  font-size: 14px;
+}
+.err {
+  margin: -6px 0 14px;
+}
+.lang {
+  width: 100%;
+  margin-top: 12px;
+}

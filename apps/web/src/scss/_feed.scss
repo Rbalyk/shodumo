@@ -9,6 +9,16 @@
   @include from($bp-md) {
     padding: 28px 40px 56px;
   }
+
+  .layout {
+    display: flex;
+    gap: 28px;
+  }
+
+  .main {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 // ---------- filter row + view toggle ----------
@@ -26,7 +36,8 @@
   @include from($bp-md) {
     flex-wrap: wrap;
   }
-  span{
+
+  span {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +57,8 @@
     display: flex;
   }
 
-  button,a {
+  button,
+  a {
     display: inline-flex;
     align-items: center;
     gap: 7px;
@@ -61,7 +73,8 @@
       color: var(--ink);
       box-shadow: var(--shadow-card);
     }
-    span{
+
+    span {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -69,12 +82,7 @@
   }
 }
 
-// ---------- layout: sidebar + grid ----------
-.feed__layout {
-  display: flex;
-  gap: 28px;
-}
-
+// ---------- sidebar ----------
 .sidebar {
   width: 240px;
   flex-shrink: 0;
@@ -87,14 +95,14 @@
     display: block;
   }
 
-  &__card {
+  .card {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--r-lg);
     padding: 20px;
   }
 
-  &__section {
+  .section {
     margin-bottom: 22px;
 
     &:last-child {
@@ -102,7 +110,7 @@
     }
   }
 
-  &__title {
+  .title {
     font-size: 12.5px;
     font-weight: 800;
     color: var(--ink-3);
@@ -111,7 +119,7 @@
     margin-bottom: 12px;
   }
 
-  &__row {
+  .row {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -132,12 +140,8 @@
   }
 }
 
-.feed__main {
-  flex: 1;
-  min-width: 0;
-}
-
-.feed__head {
+// ---------- feed heading + count (shared across feed / event / organizer / saved) ----------
+.feed-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -152,12 +156,12 @@
       font-size: 22px;
     }
   }
+}
 
-  .feed__count {
-    font-size: 14.5px;
-    color: var(--ink-2);
-    font-weight: 600;
-  }
+.feed-count {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  font-weight: 600;
 }
 
 .grid {
@@ -175,7 +179,7 @@
   }
 }
 
-// ---------- event card ----------
+// ---------- event card (single source: src/pages/partials/event-card.html) ----------
 .event-card {
   background: var(--surface);
   border-radius: var(--r-md);
@@ -187,28 +191,38 @@
   text-align: left;
   width: 100%;
 
-  &__cover {
+  .cover {
     position: relative;
     height: 156px;
+
+    .ph {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .heart-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
+    }
   }
 
-  &__cat {
+  .cat {
     position: absolute;
     top: 12px;
     left: 12px;
   }
 
-  &__heart {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-
-  &__body {
+  .body {
     padding: 14px 16px 16px;
   }
 
-  &__top {
+  .top {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -216,7 +230,7 @@
     margin-bottom: 8px;
   }
 
-  &__date {
+  .date {
     font-size: 12.5px;
     font-weight: 700;
     color: var(--accent);
@@ -226,7 +240,7 @@
     text-overflow: ellipsis;
   }
 
-  &__price {
+  .price {
     flex-shrink: 0;
     font-weight: 700;
     font-size: 12.5px;
@@ -236,7 +250,7 @@
     }
   }
 
-  &__title {
+  .title {
     font-size: 17.5px;
     font-weight: 800;
     letter-spacing: -0.01em;
@@ -246,7 +260,7 @@
     @include line-clamp(2);
   }
 
-  &__meta {
+  .meta {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -255,7 +269,7 @@
     font-weight: 600;
   }
 
-  &__place {
+  .place {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -268,7 +282,7 @@
     }
   }
 
-  &__going {
+  .going {
     display: inline-flex;
     align-items: center;
     gap: 5px;

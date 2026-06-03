@@ -14,12 +14,12 @@
   function signInPrompt(title, text) {
     return (
       '<div class="empty-state">' +
-      '<div class="empty-state__icon">' + icon('profile', { size: 34 }) + '</div>' +
+      '<div class="icon">' + icon('profile', { size: 34 }) + '</div>' +
       '<h3>' + esc(title) + '</h3>' +
       '<p>' + esc(text) + '</p>' +
-      '<div class="empty-state__actions">' +
-      '<button class="btn btn--grad" type="button" data-login>' + esc(t('auth.login')) + '</button>' +
-      '<button class="btn btn--soft" type="button" data-register>' + esc(t('auth.register')) + '</button>' +
+      '<div class="actions">' +
+      '<button class="btn btn-accent" type="button" data-login>' + esc(t('auth.login')) + '</button>' +
+      '<button class="btn btn-soft" type="button" data-register>' + esc(t('auth.register')) + '</button>' +
       '</div></div>'
     );
   }
@@ -47,12 +47,12 @@
             icon: 'heart',
             title: t('saved.emptyTitle'),
             text: t('saved.emptyText'),
-            actionHtml: '<a class="btn btn--grad" href="' + langBase + '/">' + esc(t('saved.toEvents')) + '</a>',
+            actionHtml: '<a class="btn btn-accent" href="' + langBase + '/">' + esc(t('saved.toEvents')) + '</a>',
           });
           if (countEl) countEl.textContent = '';
           return;
         }
-        gridEl.innerHTML = data.map(render.cardHtml).join('');
+        if (render.replaceCards) render.replaceCards(gridEl, data);
         if (countEl) countEl.textContent = t('feed.count', { n: data.length });
       }).catch(function () {
         gridEl.innerHTML = render.errorState();
@@ -84,12 +84,12 @@
       var initials = (auth && auth.initials) ? auth.initials(u) : '?';
       host.innerHTML =
         '<div class="profile-card">' +
-        '<div class="avatar avatar--lg ' + esc(hue) + '">' + esc(initials) + '</div>' +
-        '<h1 class="profile-card__name">' + esc(u.name || t('profile.guest')) + '</h1>' +
-        (u.email ? '<p class="profile-card__email">' + esc(u.email) + '</p>' : '') +
-        '<div class="profile-card__links">' +
-        '<a class="btn btn--soft" href="' + langBase + '/saved.html">' + icon('heart', { size: 18 }) + '<span>' + esc(t('profile.savedLink')) + '</span></a>' +
-        '<button class="btn btn--soft" type="button" data-logout><span>' + esc(t('profile.logout')) + '</span></button>' +
+        '<div class="avatar avatar-lg ' + esc(hue) + '">' + esc(initials) + '</div>' +
+        '<h1 class="name">' + esc(u.name || t('profile.guest')) + '</h1>' +
+        (u.email ? '<p class="email">' + esc(u.email) + '</p>' : '') +
+        '<div class="links">' +
+        '<a class="btn btn-soft" href="' + langBase + '/saved.html">' + icon('heart', { size: 18 }) + '<span>' + esc(t('profile.savedLink')) + '</span></a>' +
+        '<button class="btn btn-soft" type="button" data-logout><span>' + esc(t('profile.logout')) + '</span></button>' +
         '</div></div>';
     }
 

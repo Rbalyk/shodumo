@@ -97,7 +97,7 @@
           if (sec) sec.style.display = 'none';
           return;
         }
-        wrap.innerHTML = data.map(render.cardHtml).join('');
+        if (render.replaceCards) render.replaceCards(wrap, data);
       })
       .catch(function () {
         var sec = wrap.closest('.similar');

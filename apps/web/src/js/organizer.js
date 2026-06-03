@@ -32,8 +32,8 @@
             title: t('organizer.emptyTitle'),
             text: t('organizer.emptyText'),
           }) : '';
-        } else {
-          gridEl.innerHTML = events.map(render.cardHtml).join('');
+        } else if (render.replaceCards) {
+          render.replaceCards(gridEl, events);
         }
       }
       if (countEl) countEl.textContent = events.length ? t('feed.count', { n: events.length }) : '';
@@ -45,8 +45,8 @@
   function heroHtml(org) {
     var initial = (org.name || '?').trim().charAt(0).toUpperCase();
     var avatar = org.avatar
-      ? '<img class="avatar org-hero__avatar" src="' + esc(org.avatar) + '" alt="' + esc(org.name) + '">'
-      : '<div class="avatar org-hero__avatar cat-music" style="font-size:32px">' + esc(initial) + '</div>';
+      ? '<img class="avatar" src="' + esc(org.avatar) + '" alt="' + esc(org.name) + '">'
+      : '<div class="avatar cat-music" style="font-size:32px">' + esc(initial) + '</div>';
     var links = org.links || {};
     var linkHtml = '';
     if (links.website) linkHtml += '<a href="' + esc(links.website) + '" target="_blank" rel="noopener">' + esc(t('organizer.website')) + '</a>';
@@ -55,9 +55,9 @@
     return (
       avatar +
       '<div>' +
-      '<h1 class="org-hero__name">' + esc(org.name || t('organizer.fallbackName')) + '</h1>' +
-      (org.bio ? '<p class="org-hero__bio">' + esc(org.bio) + '</p>' : '') +
-      (linkHtml ? '<div class="org-hero__links">' + linkHtml + '</div>' : '') +
+      '<h1 class="name">' + esc(org.name || t('organizer.fallbackName')) + '</h1>' +
+      (org.bio ? '<p class="bio">' + esc(org.bio) + '</p>' : '') +
+      (linkHtml ? '<div class="links">' + linkHtml + '</div>' : '') +
       '</div>'
     );
   }

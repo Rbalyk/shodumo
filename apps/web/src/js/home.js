@@ -1,5 +1,9 @@
 /* global window, document */
-// ShoDumo — shared renderers (window.SD.render) + home feed controller
+// ShoDumo — shared renderers (window.SD.render) + home feed controller.
+// Event cards come from ONE source of truth: the <template id="event-card-tpl">
+// embedded in the page (src/pages/partials/event-card.html). The same template
+// is filled at build time by scripts/prerender.js and here on the client — so
+// there are no card HTML strings living in the JS bundle.
 (function () {
   window.SD = window.SD || {};
   var api = window.SD.api;
@@ -11,65 +15,82 @@
   var t = window.SD.t || function (k) { return k; };
   var langBase = window.SD.langBase || '';
 
-  // ---------------------------------------------------------------- renderers
-  // category placeholder cover (ph) for an event view-model
-  function coverHtml(e, opts) {
-    opts = opts || {};
-    var glyphSize = opts.glyphSize || 34;
-    if (e.cover) {
-      return (
-        '<img class="cover-img" src="' + esc(e.cover) + '" alt="' + esc(e.title) +
-        '" loading="lazy" decoding="async">'
-      );
-    }
-    return (
-      '<div class="ph ' + e.hue + '" style="position:absolute;inset:0;width:100%;height:100%;border-radius:inherit">' +
-      '<span class="ph__glyph">' + icon(e.glyph, { size: glyphSize }) + '</span>' +
-      '<span class="ph__tag">' + esc(e.catLabel) + '</span>' +
-      '</div>'
-    );
+  // ---------------------------------------------------------------- icons
+  // fill empty [data-icon] placeholders inside a freshly built subtree
+  function fillIcons(root) {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll('[data-icon]').forEach(function (n) {
+      if (n.firstChild) return;
+      var name = n.getAttribute('data-icon');
+      var size = parseInt(n.getAttribute('data-size'), 10) || 22;
+      n.innerHTML = icon(name, { size: size });
+    });
   }
 
-  function catChip(e, onCover) {
-    return (
-      '<span class="cat-chip' + (onCover ? ' cat-chip--on-cover' : '') + '">' +
-      icon(e.glyph, { size: 14 }) + esc(e.catLabel) + '</span>'
-    );
-  }
-
-  // full event card (anchor to detail). data-id for delegation.
-  function cardHtml(raw) {
+  // ---------------------------------------------------------------- card template
+  // map an API event → the token set consumed by event-card.html
+  function cardData(raw) {
     var e = util.normalizeEvent ? util.normalizeEvent(raw) : raw;
-    var priceCls = e.isPaid ? '' : ' is-free';
-    return (
-      '<a class="event-card reveal hoverable" href="' + langBase + '/event/' + esc(e.slug) + '/" data-event-card data-id="' + esc(e.id) + '">' +
-      '<div class="event-card__cover">' +
-      coverHtml(e) +
-      '<span class="event-card__cat">' + catChip(e, true) + '</span>' +
-      '<button class="heart-btn heart-btn--on-cover event-card__heart' + (e.isSaved ? ' is-saved' : '') +
-      '" type="button" style="width:38px;height:38px" aria-label="' + esc(t('event.save')) + '" data-save data-id="' + esc(e.id) + '">' +
-      icon('heart', { size: 18, fill: e.isSaved }) + '</button>' +
-      '</div>' +
-      '<div class="event-card__body">' +
-      '<div class="event-card__top">' +
-      '<span class="event-card__date">' + esc(e.dateLabel) + '</span>' +
-      '<span class="event-card__price' + priceCls + '">' + esc(e.priceLabel) + '</span>' +
-      '</div>' +
-      '<h3 class="event-card__title">' + esc(e.title) + '</h3>' +
-      '<div class="event-card__meta">' +
-      '<span class="event-card__place">' + icon('pin', { size: 15 }) + '<span>' + esc(e.address || (e.city && e.city.name) || (window.SD.city && window.SD.city.nameOf(window.SD.city.getSelected())) || '') + '</span></span>' +
-      '<span class="event-card__going">' + icon('users', { size: 15 }) + esc(e.attendeeCount || 0) + '</span>' +
-      '</div>' +
-      '</div>' +
-      '</a>'
-    );
+    var iso = '';
+    var d = util.parseDate ? util.parseDate(e.startsAt) : null;
+    if (d) iso = d.toISOString();
+    var place = e.address || (e.city && e.city.name) ||
+      (window.SD.city && window.SD.city.nameOf(window.SD.city.getSelected())) || '';
+    return {
+      id: esc(e.id),
+      href: langBase + '/event/' + esc(e.slug) + '/',
+      glyph: e.glyph,
+      hue: e.hue,
+      catLabel: esc(e.catLabel),
+      title: esc(e.title),
+      place: esc(place),
+      going: esc(e.attendeeCount || 0),
+      dateLabel: esc(e.dateLabel),
+      startsAtIso: esc(iso),
+      priceLabel: esc(e.priceLabel),
+      coverSrc: esc(e.cover || ''),
+      coverImgHidden: e.cover ? '' : 'hidden',
+      coverPhHidden: e.cover ? 'hidden' : '',
+      savedClass: e.isSaved ? ' is-saved' : '',
+      freeClass: e.isPaid ? '' : ' is-free',
+      saveLabel: esc(t('event.save')),
+    };
   }
 
+  var TPL_RE = /\{\{(\w+)\}\}/g;
+  // clone the shared template and fill it for one event → a card element
+  function cardEl(raw) {
+    var tpl = document.getElementById('event-card-tpl');
+    if (!tpl) return null;
+    var data = cardData(raw);
+    var html = tpl.innerHTML.replace(TPL_RE, function (m, k) {
+      return data[k] != null ? data[k] : '';
+    });
+    var wrap = document.createElement('div');
+    wrap.innerHTML = html.trim();
+    var el = wrap.firstElementChild;
+    if (el) fillIcons(el);
+    return el;
+  }
+
+  // clear a grid and (re)render a list of events using the shared template
+  function replaceCards(gridEl, list) {
+    if (!gridEl) return;
+    gridEl.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    (list || []).forEach(function (raw) {
+      var el = cardEl(raw);
+      if (el) frag.appendChild(el);
+    });
+    gridEl.appendChild(frag);
+  }
+
+  // ---------------------------------------------------------------- non-card states
   function skeletonCard() {
     return (
       '<div class="skeleton-card">' +
       '<div class="skel" style="height:156px"></div>' +
-      '<div class="skeleton-card__body">' +
+      '<div class="body">' +
       '<div class="skel" style="height:12px;width:50%"></div>' +
       '<div class="skel" style="height:18px;width:85%"></div>' +
       '<div class="skel" style="height:12px;width:60%"></div>' +
@@ -87,7 +108,7 @@
     opts = opts || {};
     return (
       '<div class="empty-state">' +
-      '<div class="empty-state__icon">' + icon(opts.icon || 'search', { size: 34 }) + '</div>' +
+      '<div class="icon">' + icon(opts.icon || 'search', { size: 34 }) + '</div>' +
       '<h3>' + esc(opts.title || t('feed.emptyTitle')) + '</h3>' +
       '<p>' + esc(opts.text || t('feed.emptyText')) + '</p>' +
       (opts.actionHtml || '') +
@@ -95,21 +116,21 @@
     );
   }
 
-  function errorState(onRetry) {
-    var html =
+  function errorState() {
+    return (
       '<div class="empty-state">' +
-      '<div class="empty-state__icon">' + icon('close', { size: 34 }) + '</div>' +
+      '<div class="icon">' + icon('close', { size: 34 }) + '</div>' +
       '<h3>' + esc(t('feed.errorTitle')) + '</h3>' +
       '<p>' + esc(t('feed.errorText')) + '</p>' +
-      '<button class="btn btn--soft" type="button" data-retry>' + esc(t('feed.retry')) + '</button>' +
-      '</div>';
-    return html;
+      '<button class="btn btn-soft" type="button" data-retry>' + esc(t('feed.retry')) + '</button>' +
+      '</div>'
+    );
   }
 
   window.SD.render = {
-    coverHtml: coverHtml,
-    catChip: catChip,
-    cardHtml: cardHtml,
+    fillIcons: fillIcons,
+    cardEl: cardEl,
+    replaceCards: replaceCards,
     skeletonCard: skeletonCard,
     skeletonGrid: skeletonGrid,
     emptyState: emptyState,
@@ -126,7 +147,6 @@
       op.then(function () {
         toast(saved ? t('toast.saved') : t('toast.unsaved'), { icon: saved ? 'heart' : 'check' });
       }).catch(function () {
-        // revert on failure
         var back = btn.classList.toggle('is-saved');
         btn.innerHTML = icon('heart', { size: 18, fill: back });
         toast(t('toast.updateFailed'), { icon: 'close' });
@@ -159,22 +179,22 @@
       q: '',
     };
 
+    // hydrate: the feed is already pre-rendered into the HTML — attach
+    // interactivity to the existing DOM instead of wiping it.
     window.SD.render.bindSaveButtons(gridEl);
 
-    // react to city switch from the header/sidebar dropdown
     document.addEventListener('sd:city-changed', function (e) {
       state.city = (e.detail && e.detail.slug) || state.city;
       state.page = 1;
       load();
     });
 
-    // wire category chips + sidebar rows (data-cat attribute)
     function wireFilters(scope) {
       if (!scope) return;
       scope.addEventListener('click', function (e) {
-        var t = e.target.closest('[data-cat]');
-        if (!t) return;
-        state.category = t.getAttribute('data-cat') || '';
+        var target = e.target.closest('[data-cat]');
+        if (!target) return;
+        state.category = target.getAttribute('data-cat') || '';
         state.page = 1;
         updateActive();
         load();
@@ -189,13 +209,14 @@
     wireFilters(chipsEl);
     wireFilters(sidebarEl);
 
-    // retry delegation
     gridEl.addEventListener('click', function (e) {
       if (e.target.closest('[data-retry]')) load();
     });
 
-    function load() {
-      gridEl.innerHTML = window.SD.render.skeletonGrid(6);
+    // silent = keep the pre-rendered cards visible until fresh data arrives
+    function load(opts) {
+      opts = opts || {};
+      if (!opts.silent) gridEl.innerHTML = window.SD.render.skeletonGrid(6);
       var params = { city: state.city, page: state.page, limit: 12 };
       if (state.category) params.category = state.category;
       if (state.q) params.q = state.q;
@@ -210,22 +231,25 @@
           if (countEl) countEl.textContent = '';
           return;
         }
-        gridEl.innerHTML = data.map(window.SD.render.cardHtml).join('');
+        window.SD.render.replaceCards(gridEl, data);
         if (countEl) countEl.textContent = t('feed.count', { n: meta.total || data.length });
       }).catch(function () {
-        gridEl.innerHTML = window.SD.render.errorState();
-        if (countEl) countEl.textContent = '';
+        // on a silent refresh failure keep the pre-rendered cards in place
+        if (!opts.silent) {
+          gridEl.innerHTML = window.SD.render.errorState();
+          if (countEl) countEl.textContent = '';
+        }
       });
     }
 
-    // populate category sidebar/chips from API (if containers expect dynamic fill)
+    // populate category sidebar from API (if the container expects dynamic fill)
     if (sidebarEl && sidebarEl.hasAttribute('data-dynamic')) {
       api.getCategories().then(function (cats) {
-        var rows = '<button class="sidebar__row is-active" data-cat="">' +
+        var rows = '<button class="row is-active" data-cat="">' +
           icon('sparkles', { size: 18 }) + '<span>' + esc(t('sidebar.allEvents')) + '</span></button>';
         (cats || []).forEach(function (c) {
           var meta = window.SD.categoryMeta ? window.SD.categoryMeta(c) : { glyph: 'sparkles', label: c.name };
-          rows += '<button class="sidebar__row" data-cat="' + esc(c.slug) + '">' +
+          rows += '<button class="row" data-cat="' + esc(c.slug) + '">' +
             icon(meta.glyph, { size: 18 }) + '<span>' + esc(c.name) + '</span></button>';
         });
         sidebarEl.innerHTML = rows;
@@ -233,7 +257,8 @@
     }
 
     updateActive();
-    load();
+    // freshness pass: pull current data once without flashing skeletons
+    load({ silent: true });
   }
 
   window.SD.initHome = initHome;

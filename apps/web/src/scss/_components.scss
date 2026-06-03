@@ -7,7 +7,7 @@
   align-items: flex-end;
   gap: 3px;
 
-  &__text {
+  .text {
     font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -20,7 +20,7 @@
   }
 
   // the lively accent dot — sits on the baseline like a period
-  &__dot {
+  .dot {
     flex-shrink: 0;
     width: 7px;
     height: 7px;
@@ -36,6 +36,7 @@
 }
 
 // ---------- buttons ----------
+// base class + flat variant classes (no BEM modifiers)
 .btn {
   display: inline-flex;
   align-items: center;
@@ -48,33 +49,33 @@
   line-height: 1;
   white-space: nowrap;
 
-  &--grad {
-    background: var(--grad);
-    color: var(--accent-ink);
-    font-weight: 800;
-    box-shadow: var(--shadow-card);
-  }
-
-  &--outline {
-    color: var(--ink);
-    box-shadow: inset 0 0 0 1.5px var(--line-2);
-  }
-
-  &--soft {
-    background: var(--surface-2);
-    color: var(--ink);
-  }
-
-  &--block {
-    width: 100%;
-  }
-
   &:disabled {
     cursor: not-allowed;
     background: var(--surface-3);
     color: var(--ink-3);
     box-shadow: none;
   }
+}
+
+.btn-accent {
+  background: var(--grad);
+  color: var(--accent-ink);
+  font-weight: 800;
+  box-shadow: var(--shadow-card);
+}
+
+.btn-outline {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--line-2);
+}
+
+.btn-soft {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.btn-block {
+  width: 100%;
 }
 
 .icon-btn {
@@ -86,7 +87,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  svg{
+
+  svg {
     display: block;
   }
 }
@@ -131,16 +133,16 @@
   padding: 7px 14px;
   border-radius: var(--r-pill);
   line-height: 1;
+}
 
-  &--free {
-    background: var(--free-soft);
-    color: var(--free);
-  }
+.badge-free {
+  background: var(--free-soft);
+  color: var(--free);
+}
 
-  &--paid {
-    background: var(--accent-soft);
-    color: var(--accent);
-  }
+.badge-paid {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .cat-chip {
@@ -154,12 +156,12 @@
   line-height: 1;
   background: var(--surface-2);
   color: var(--ink-2);
+}
 
-  &--on-cover {
-    background: rgba(0, 0, 0, 0.34);
-    color: #fff;
-    backdrop-filter: blur(6px);
-  }
+.cat-chip-on-cover {
+  background: rgba(0, 0, 0, 0.34);
+  color: #fff;
+  backdrop-filter: blur(6px);
 }
 
 // ---------- avatar ----------
@@ -173,7 +175,7 @@
   background: var(--ph-base, var(--accent));
 }
 
-.avatar--user {
+.avatar-user {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -192,15 +194,15 @@
   color: var(--ink-2);
   transition: color 0.2s ease;
 
-  &--on-cover {
-    background: rgba(0, 0, 0, 0.34);
-    backdrop-filter: blur(6px);
-    color: #fff;
-  }
-
   &.is-saved {
     color: var(--accent-3);
   }
+}
+
+.heart-btn-on-cover {
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(6px);
+  color: #fff;
 }
 
 // ---------- going CTA ----------
@@ -221,10 +223,6 @@
   box-shadow: var(--shadow-card);
   transition: background 0.25s ease, color 0.25s ease;
 
-  &--full {
-    flex: 1;
-  }
-
   &.is-going {
     background: var(--accent-soft);
     color: var(--accent);
@@ -232,12 +230,20 @@
   }
 }
 
+.going-btn-full {
+  flex: 1;
+}
+
 // ---------- forms ----------
 .field {
   display: block;
   margin-bottom: 14px;
 
-  &__label {
+  &[hidden] {
+    display: none;
+  }
+
+  .label {
     display: block;
     font-size: 13px;
     font-weight: 700;
@@ -245,7 +251,7 @@
     margin-bottom: 7px;
   }
 
-  &__wrap {
+  .wrap {
     position: relative;
     display: block;
   }
@@ -269,7 +275,7 @@
     }
   }
 
-  &__ok {
+  .ok {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -295,7 +301,7 @@
   padding: 70px 32px;
   gap: 6px;
 
-  &__icon {
+  .icon {
     position: relative;
     width: 84px;
     height: 84px;
@@ -322,6 +328,13 @@
     margin: 0 0 16px;
     font-weight: 500;
   }
+
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 // ---------- site footer ----------
@@ -335,7 +348,7 @@
     padding: 32px 40px;
   }
 
-  &__inner {
+  .inner {
     max-width: $container;
     margin: 0 auto;
     display: flex;
@@ -350,7 +363,7 @@
     }
   }
 
-  &__links {
+  .links {
     display: flex;
     gap: 18px;
 
@@ -361,7 +374,7 @@
     }
   }
 
-  &__copy {
+  .copy {
     font-size: 13px;
     color: var(--ink-3);
     font-weight: 600;
@@ -404,12 +417,12 @@
     margin: 0 0 14px;
   }
 
-  &__lead {
+  .lead {
     font-size: 18px;
     color: var(--ink);
   }
 
-  &__cta {
+  .cta {
     display: flex;
     gap: 12px;
     margin-top: 28px;
@@ -425,16 +438,16 @@
     padding: 32px 40px 64px;
   }
 
-  &__inner {
+  .inner {
     max-width: $container;
     margin: 0 auto;
 
-    &--narrow {
+    &.narrow {
       max-width: 520px;
     }
   }
 
-  &__head {
+  .head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -450,13 +463,6 @@
   }
 }
 
-.empty-state__actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 // ---------- profile card ----------
 .profile-card {
   display: flex;
@@ -469,7 +475,7 @@
   border: 1px solid var(--line);
   border-radius: var(--r-lg, 22px);
 
-  .avatar--lg {
+  .avatar-lg {
     width: 84px;
     height: 84px;
     border-radius: 50%;
@@ -478,20 +484,20 @@
     background: var(--ph-base, var(--grad));
   }
 
-  &__name {
+  .name {
     font-size: 23px;
     font-weight: 800;
     margin: 0;
   }
 
-  &__email {
+  .email {
     font-size: 15px;
     color: var(--ink-2);
     font-weight: 500;
     margin: 0;
   }
 
-  &__links {
+  .links {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -507,7 +513,7 @@
   overflow: hidden;
   border: 1px solid var(--line);
 
-  &__body {
+  .body {
     padding: 14px 16px 16px;
     display: flex;
     flex-direction: column;

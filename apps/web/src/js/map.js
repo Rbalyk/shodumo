@@ -16,7 +16,7 @@
   function accentIcon(hue) {
     var color = '#7c3aed';
     var html =
-      '<span class="sd-pin sd-pin--' + (hue || 'cat-music') + '" style="background:' + color + '">' +
+      '<span class="sd-pin ' + (hue || 'cat-music') + '" style="background:' + color + '">' +
       icon('pin', { size: 16, fill: false }) + '</span>';
     return L.divIcon({
       className: 'sd-marker',
@@ -49,11 +49,11 @@
     var esc = util.escapeHtml || function (s) { return s; };
     return (
       '<div class="map-popup">' +
-      '<div class="map-popup__cover ph ' + e.hue + '">' +
-      '<span class="ph__glyph">' + icon(e.glyph, { size: 28 }) + '</span></div>' +
-      '<div class="map-popup__title">' + esc(e.title) + '</div>' +
-      '<div class="map-popup__date">' + esc(e.dateLabel) + '</div>' +
-      '<a class="map-popup__link" href="' + langBase + '/event/' + esc(e.slug) + '/">' + esc(t('event.more')) + ' ' + icon('chevRight', { size: 14 }) + '</a>' +
+      '<div class="cover ph ' + e.hue + '">' +
+      '<span class="glyph">' + icon(e.glyph, { size: 28 }) + '</span></div>' +
+      '<div class="title">' + esc(e.title) + '</div>' +
+      '<div class="date">' + esc(e.dateLabel) + '</div>' +
+      '<a class="link" href="' + langBase + '/event/' + esc(e.slug) + '/">' + esc(t('event.more')) + ' ' + icon('chevRight', { size: 14 }) + '</a>' +
       '</div>'
     );
   }
@@ -75,7 +75,7 @@
 
   // route controller: fetch feed events and render the full map page
   function initMapPageRoute() {
-    var el = document.getElementById('map');
+    var el = document.querySelector('.map');
     if (!el) return;
     var api = window.SD.api;
     if (!api) return;

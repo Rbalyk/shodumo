@@ -6,6 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="19083d1c-d0e8-496a-8f54-1e4bea769695" name="Changes" comment="env">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.production.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.production.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/scripts/prerender.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/scripts/prerender.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/account.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/account.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/city.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/city.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/event.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/event.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/map.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/organizer.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/organizer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/toast.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/js/toast.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/partials/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/tabbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/partials/tabbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/saved.html" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/saved.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_base.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_components.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_components.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_event.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_event.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_feed.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_feed.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_header.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_header.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_map.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_map.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,22 +61,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JavaScript Debug.localhost:3002.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/romanbalyk/WebstormProjects/shodumo/shodumo-cabinet&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/romanbalyk/WebstormProjects/shodumo/apps/api/node_modules/typescript/lib&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.localhost:3002.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/romanbalyk/WebstormProjects/shodumo/shodumo-cabinet",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Run",
+    "npm.start.executor": "Run",
+    "ts.external.directory.path": "/Users/romanbalyk/WebstormProjects/shodumo/apps/api/node_modules/typescript/lib"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/shodumo-cabinet" />
@@ -63,12 +92,34 @@
       <recent name="$PROJECT_DIR$/apps/web/claude-files" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.start">
     <configuration name="localhost:3002" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:3002">
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/apps/web/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/apps/api/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.dev" />
         <item itemvalue="JavaScript Debug.localhost:3002" />
       </list>
     </recent_temporary>
@@ -87,7 +138,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1780380810359</updated>
-      <workItem from="1780380811656" duration="28026000" />
+      <workItem from="1780380811656" duration="30870000" />
+      <workItem from="1780476057599" duration="3411000" />
     </task>
     <task id="LOCAL-00001" summary="redirects">
       <option name="closed" value="true" />
@@ -137,7 +189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780429709146</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="env">
+      <option name="closed" value="true" />
+      <created>1780435345123</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1780435345123</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

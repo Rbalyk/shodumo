@@ -1,0 +1,24 @@
+<a class="event-card reveal hoverable" data-event-card data-id="{{id}}" href="{{href}}">
+  <div class="cover">
+    <img class="cover-img" src="{{coverSrc}}" alt="{{title}}" loading="lazy" decoding="async" {{coverImgHidden}}>
+    <span class="ph {{hue}}" {{coverPhHidden}}>
+      <span class="glyph" data-icon="{{glyph}}" data-size="34"></span>
+      <span class="tag">{{catLabel}}</span>
+    </span>
+    <span class="cat cat-chip cat-chip-on-cover"><span data-icon="{{glyph}}" data-size="14"></span>{{catLabel}}</span>
+    <button class="heart-btn heart-btn-on-cover{{savedClass}}" type="button" data-save data-id="{{id}}" aria-label="{{saveLabel}}">
+      <span data-icon="heart" data-size="18"></span>
+    </button>
+  </div>
+  <div class="body">
+    <div class="top">
+      <time class="date" datetime="{{startsAtIso}}">{{dateLabel}}</time>
+      <span class="price{{freeClass}}">{{priceLabel}}</span>
+    </div>
+    <h3 class="title">{{title}}</h3>
+    <div class="meta">
+      <span class="place"><span data-icon="pin" data-size="15"></span><span>{{place}}</span></span>
+      <span class="going"><span data-icon="users" data-size="15"></span>{{going}}</span>
+    </div>
+  </div>
+</a>

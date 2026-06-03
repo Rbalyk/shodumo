@@ -23,26 +23,26 @@
     </div>
   </div>
 
-  <div class="feed__layout">
+  <div class="layout">
     <aside class="sidebar">
-      <div class="sidebar__card">
-        <div class="sidebar__section">
-          <div class="sidebar__title">@@t.sidebar.categories</div>
+      <div class="card">
+        <div class="section">
+          <div class="title">@@t.sidebar.categories</div>
           <div data-cat-list data-dynamic>
-            <button class="sidebar__row is-active" data-cat=""><span data-icon="sparkles" data-size="18"></span><span>@@t.sidebar.allEvents</span></button>
+            <button class="row is-active" data-cat=""><span data-icon="sparkles" data-size="18"></span><span>@@t.sidebar.allEvents</span></button>
           </div>
         </div>
-        <div class="sidebar__section">
-          <div class="sidebar__title">@@t.sidebar.city</div>
-          <button class="sidebar__row is-active" type="button" data-city-toggle><span data-icon="pin" data-size="18"></span><span data-city-name>@@t.city.lviv</span></button>
+        <div class="section">
+          <div class="title">@@t.sidebar.city</div>
+          <button class="row is-active" type="button" data-city-toggle><span data-icon="pin" data-size="18"></span><span data-city-name>@@t.city.lviv</span></button>
         </div>
       </div>
     </aside>
 
-    <div class="feed__main">
-      <div class="feed__head">
+    <div class="main">
+      <div class="feed-head">
         <h2>@@t.feed.heading</h2>
-        <span class="feed__count" data-feed-count></span>
+        <span class="feed-count" data-feed-count></span>
       </div>
       <div class="grid" data-feed-grid>
         <!-- skeletons / cards injected by JS; prerender may inline initial cards here -->

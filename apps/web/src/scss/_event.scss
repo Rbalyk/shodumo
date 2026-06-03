@@ -9,6 +9,155 @@
   @include from($bp-md) {
     padding: 24px 40px 64px;
   }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+
+    @include from($bp-lg) {
+      grid-template-columns: 1fr 380px;
+      gap: 36px;
+      align-items: start;
+    }
+  }
+
+  .main {
+    min-width: 0;
+
+    @include until($bp-md) {
+      padding: 0 18px;
+    }
+  }
+
+  .hero-cover {
+    position: relative;
+    margin-bottom: 20px;
+
+    .ph {
+      height: 300px;
+      border-radius: 0;
+
+      @include from($bp-md) {
+        height: 420px;
+        border-radius: var(--r-xl);
+      }
+    }
+
+    .cat {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+
+      @include from($bp-md) {
+        top: 18px;
+        left: 18px;
+      }
+    }
+
+    .share-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: var(--r-pill);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+
+      @include until($bp-md) {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+
+        span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .heading {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    margin: 0 0 20px;
+    text-wrap: balance;
+
+    @include from($bp-md) {
+      font-size: 38px;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .desc {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    margin: 0 0 28px;
+    font-weight: 500;
+    max-width: 620px;
+
+    p {
+      margin: 0 0 1em;
+    }
+  }
+
+  .aside {
+    @include until($bp-md) {
+      padding: 0 18px;
+    }
+
+    @include from($bp-lg) {
+      position: sticky;
+      top: calc(#{$header-h} + 24px);
+    }
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-xl);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+
+    @include until($bp-lg) {
+      border-radius: var(--r-lg);
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+
+    button span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }
 
 .back-btn {
@@ -45,121 +194,6 @@
   }
 }
 
-.event__layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 22px;
-
-  @include from($bp-lg) {
-    grid-template-columns: 1fr 380px;
-    gap: 36px;
-    align-items: start;
-  }
-}
-
-.event__main {
-  min-width: 0;
-
-  @include until($bp-md) {
-    padding: 0 18px;
-  }
-}
-
-.event__cover {
-  position: relative;
-  margin-bottom: 20px;
-
-  .ph {
-    height: 300px;
-    border-radius: 0;
-
-    @include from($bp-md) {
-      height: 420px;
-      border-radius: var(--r-xl);
-    }
-  }
-
-  &-cat {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-
-    @include from($bp-md) {
-      top: 18px;
-      left: 18px;
-    }
-  }
-
-  .share-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: var(--r-pill);
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 700;
-
-    @include until($bp-md) {
-      width: 42px;
-      height: 42px;
-      padding: 0;
-      justify-content: center;
-      border-radius: 50%;
-
-      span {
-        display: none;
-      }
-    }
-  }
-}
-
-.event__badges {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.event__title {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.12;
-  margin: 0 0 20px;
-  text-wrap: balance;
-
-  @include from($bp-md) {
-    font-size: 38px;
-    letter-spacing: -0.03em;
-    margin-bottom: 28px;
-  }
-}
-
-.event__section-title {
-  font-size: 18px;
-  font-weight: 800;
-  margin: 0 0 12px;
-  letter-spacing: -0.01em;
-}
-
-.event__desc {
-  font-size: 16px;
-  line-height: 1.65;
-  color: var(--ink-2);
-  margin: 0 0 28px;
-  font-weight: 500;
-  max-width: 620px;
-
-  p {
-    margin: 0 0 1em;
-  }
-}
-
 // info rows
 .info-rows {
   display: flex;
@@ -173,7 +207,7 @@
   align-items: center;
   gap: 13px;
 
-  &__icon {
+  .icon {
     width: 42px;
     height: 42px;
     border-radius: var(--r-sm);
@@ -184,13 +218,13 @@
     flex-shrink: 0;
   }
 
-  &__title {
+  .title {
     font-size: 15.5px;
     font-weight: 700;
     line-height: 1.3;
   }
 
-  &__sub {
+  .sub {
     font-size: 13.5px;
     color: var(--ink-2);
     font-weight: 600;
@@ -212,30 +246,6 @@
   }
 }
 
-// sticky aside
-.event__aside {
-  @include until($bp-md) {
-    padding: 0 18px;
-  }
-
-  @include from($bp-lg) {
-    position: sticky;
-    top: calc(#{$header-h} + 24px);
-  }
-}
-
-.event__panel {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--r-xl);
-  padding: 22px;
-  box-shadow: var(--shadow-card);
-
-  @include until($bp-lg) {
-    border-radius: var(--r-lg);
-  }
-}
-
 .going-box {
   display: flex;
   align-items: center;
@@ -245,33 +255,21 @@
   background: var(--surface-2);
   border-radius: var(--r-md);
 
-  &__n {
+  .n {
     font-size: 22px;
     font-weight: 800;
     line-height: 1.1;
     display: block;
   }
 
-  &__label {
+  .label {
     font-size: 13px;
     color: var(--ink-2);
     font-weight: 600;
   }
 
-  &__icon {
+  .icon {
     color: var(--accent);
-  }
-}
-
-.event__actions {
-  display: flex;
-  gap: 12px;
-  button{
-    span{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
   }
 }
 
@@ -293,21 +291,21 @@
     display: none;
   }
 
-  &__count {
+  .count {
     display: flex;
     flex-direction: column;
     line-height: 1.1;
+  }
 
-    .action-bar__n {
-      font-size: 19px;
-      font-weight: 800;
-    }
+  .n {
+    font-size: 19px;
+    font-weight: 800;
+  }
 
-    .action-bar__label {
-      font-size: 12.5px;
-      color: var(--ink-2);
-      font-weight: 600;
-    }
+  .label {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-weight: 600;
   }
 }
 
@@ -324,7 +322,7 @@
   border: 1px solid var(--line);
   margin: 0 0 8px;
 
-  &__label {
+  .label {
     font-size: 12px;
     font-weight: 700;
     color: var(--ink-3);
@@ -333,19 +331,19 @@
     margin-bottom: 2px;
   }
 
-  &__name {
+  .name {
     font-size: 16px;
     font-weight: 800;
     letter-spacing: -0.01em;
   }
 
-  &__sub {
+  .sub {
     font-size: 13px;
     color: var(--ink-2);
     font-weight: 600;
   }
 
-  &__chev {
+  .chev {
     color: var(--ink-3);
     margin-left: auto;
   }
@@ -378,26 +376,26 @@
   flex-wrap: wrap;
   padding: 24px 0;
 
-  &__avatar {
+  .avatar {
     width: 88px;
     height: 88px;
   }
 
-  &__name {
+  .name {
     font-size: 28px;
     font-weight: 800;
     letter-spacing: -0.02em;
     margin: 0 0 4px;
   }
 
-  &__bio {
+  .bio {
     color: var(--ink-2);
     font-weight: 500;
     max-width: 560px;
     margin: 0;
   }
 
-  &__links {
+  .links {
     display: flex;
     gap: 12px;
     margin-top: 10px;

@@ -107,6 +107,50 @@ function priceLabel(e, t) {
   return isNaN(n) ? String(e.price) : t('event.priceUah', { n: Math.round(n) });
 }
 
+// ----------------------------------------------------------------- card template
+// Single source of the event-card markup: the same partial the client clones
+// from <template id="event-card-tpl"> is filled here with {{token}} values.
+let CARD_TPL = null;
+function cardTemplate() {
+  if (CARD_TPL == null) CARD_TPL = readPartial('event-card.html');
+  return CARD_TPL;
+}
+const CARD_TOKEN_RE = /\{\{(\w+)\}\}/g;
+// match the (possibly empty) feed grid container in the built index.html so we
+// can inline static cards between its open/close tags (non-global on purpose)
+const FEED_GRID_RE = /(<div[^>]*\bdata-feed-grid\b[^>]*>)([\s\S]*?)(<\/div>)/;
+
+// map an API event → the token set consumed by event-card.html (mirrors home.js cardData)
+function cardHtml(e, lang, t, fmt) {
+  const meta = categoryMeta(e.category, t);
+  const place = e.address || (e.city && e.city.name) || t('city.lviv');
+  let iso = '';
+  const d = e.startsAt ? new Date(e.startsAt) : null;
+  if (d && !isNaN(d.getTime())) iso = d.toISOString();
+  const data = {
+    id: esc(e.id),
+    href: lang.base + '/event/' + esc(e.slug) + '/',
+    glyph: meta.glyph,
+    hue: meta.hue,
+    catLabel: esc(meta.label),
+    title: esc(e.title),
+    place: esc(place),
+    going: esc(e.attendeeCount || 0),
+    dateLabel: esc(fmt.dateTime(e.startsAt)),
+    startsAtIso: esc(iso),
+    priceLabel: esc(priceLabel(e, t)),
+    coverSrc: esc(e.coverImage || ''),
+    coverImgHidden: e.coverImage ? '' : 'hidden',
+    coverPhHidden: e.coverImage ? 'hidden' : '',
+    savedClass: e.isSaved ? ' is-saved' : '',
+    freeClass: e.isPaid ? '' : ' is-free',
+    saveLabel: esc(t('event.save')),
+  };
+  return cardTemplate().replace(CARD_TOKEN_RE, function (m, k) {
+    return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : '';
+  });
+}
+
 // ----------------------------------------------------------------- api fetch
 async function fetchJson(url) {
   if (typeof fetch !== 'function') throw new Error('global fetch unavailable (Node 18+ required)');
@@ -136,38 +180,36 @@ function eventBody(e, lang, t, fmt) {
   return `
 <main class="event" data-event-page data-slug="${esc(e.slug)}">
   <a class="back-btn" href="${lb}/"><span data-icon="back" data-size="18"></span><span>${esc(t('event.back'))}</span></a>
-  <div class="event__layout">
-    <div class="event__main">
-      <div class="event__cover">
-        <div class="ph-wrap" style="position:relative">
-          <div class="ph ${meta.hue}" style="height:300px;border-radius:0">
-            ${e.coverImage ? `<img class="cover-img" src="${esc(e.coverImage)}" alt="${esc(e.title)}">` : `<span class="ph__glyph" data-icon="${meta.glyph}" data-size="64"></span><span class="ph__tag">${esc(meta.label)}</span>`}
-          </div>
+  <div class="layout">
+    <div class="main">
+      <div class="hero-cover">
+        <div class="ph ${meta.hue}">
+          ${e.coverImage ? `<img class="cover-img" src="${esc(e.coverImage)}" alt="${esc(e.title)}">` : `<span class="glyph" data-icon="${meta.glyph}" data-size="64"></span><span class="tag">${esc(meta.label)}</span>`}
         </div>
-        <span class="event__cover-cat cat-chip cat-chip--on-cover"><span data-icon="${meta.glyph}" data-size="14"></span> ${esc(meta.label)}</span>
+        <span class="cat cat-chip cat-chip-on-cover"><span data-icon="${meta.glyph}" data-size="14"></span> ${esc(meta.label)}</span>
         <button class="share-btn" type="button" data-share><span data-icon="share" data-size="18"></span><span>${esc(t('event.share'))}</span></button>
       </div>
 
-      <div class="event__badges">
-        <span class="badge ${free ? 'badge--free' : 'badge--paid'}">${esc(priceLabel(e, t))}</span>
+      <div class="badges">
+        <span class="badge ${free ? 'badge-free' : 'badge-paid'}">${esc(priceLabel(e, t))}</span>
         <span class="cat-chip"><span data-icon="${meta.glyph}" data-size="14"></span> ${esc(meta.label)}</span>
       </div>
 
-      <h1 class="event__title">${esc(e.title)}</h1>
+      <h1 class="heading">${esc(e.title)}</h1>
 
       <div class="info-rows">
         <div class="info-row">
-          <span class="info-row__icon" data-icon="calendar" data-size="20"></span>
-          <div><div class="info-row__title">${esc(fmt.date(e.startsAt))}</div><div class="info-row__sub">${esc(fmt.time(e.startsAt))}</div></div>
+          <span class="icon" data-icon="calendar" data-size="20"></span>
+          <div><div class="title">${esc(fmt.date(e.startsAt))}</div><div class="sub">${esc(fmt.time(e.startsAt))}</div></div>
         </div>
         <div class="info-row">
-          <span class="info-row__icon" data-icon="pin" data-size="20"></span>
-          <div><div class="info-row__title">${esc(place)}</div><div class="info-row__sub">${esc(cityName)}</div></div>
+          <span class="icon" data-icon="pin" data-size="20"></span>
+          <div><div class="title">${esc(place)}</div><div class="sub">${esc(cityName)}</div></div>
         </div>
       </div>
 
-      <h2 class="event__section-title">${esc(t('event.about'))}</h2>
-      <div class="event__desc"><p>${esc(e.description || '').replace(/\n+/g, '</p><p>')}</p></div>
+      <h2 class="section-title">${esc(t('event.about'))}</h2>
+      <div class="desc"><p>${esc(e.description || '').replace(/\n+/g, '</p><p>')}</p></div>
 
       <div class="mini-map" data-mini-map aria-label="${esc(t('event.mapAria'))}"></div>
 
@@ -177,32 +219,32 @@ function eventBody(e, lang, t, fmt) {
       </section>
     </div>
 
-    <aside class="event__aside">
-      <div class="event__panel">
+    <aside class="aside">
+      <div class="panel">
         <div class="info-row">
-          <span class="info-row__icon" data-icon="calendar" data-size="20"></span>
-          <div><div class="info-row__title">${esc(fmt.dateTime(e.startsAt))}</div><div class="info-row__sub">${esc(place)}</div></div>
+          <span class="icon" data-icon="calendar" data-size="20"></span>
+          <div><div class="title">${esc(fmt.dateTime(e.startsAt))}</div><div class="sub">${esc(place)}</div></div>
         </div>
         <div class="going-box">
-          <div><span class="going-box__n" data-going-count>${esc(e.attendeeCount || 0)}</span><span class="going-box__label">${esc(t('event.going'))}</span></div>
-          <span class="going-box__icon" data-icon="users" data-size="26"></span>
+          <div><span class="n" data-going-count>${esc(e.attendeeCount || 0)}</span><span class="label">${esc(t('event.going'))}</span></div>
+          <span class="icon" data-icon="users" data-size="26"></span>
         </div>
-        <div class="event__actions">
-          <button class="going-btn going-btn--full" type="button" data-attend><span data-icon="plus" data-size="20"></span><span>${esc(t('event.cta.go'))}</span></button>
+        <div class="actions">
+          <button class="going-btn going-btn-full" type="button" data-attend><span data-icon="plus" data-size="20"></span><span>${esc(t('event.cta.go'))}</span></button>
           <button class="heart-btn" type="button" style="width:54px;height:54px" data-save data-id="${esc(e.id)}" aria-label="${esc(t('event.save'))}"><span data-icon="heart" data-size="20"></span></button>
         </div>
         ${org.id ? `<a class="organizer-card" href="${lb}/organizer/${esc(org.id)}/">
           <span class="avatar cat-music" style="width:46px;height:46px;font-size:18px">${esc((org.name || '?').charAt(0).toUpperCase())}</span>
-          <div><div class="organizer-card__label">${esc(t('event.organizer'))}</div><div class="organizer-card__name">${esc(org.name || '')}</div></div>
-          <span class="organizer-card__chev" data-icon="chevRight" data-size="20"></span>
+          <div><div class="label">${esc(t('event.organizer'))}</div><div class="name">${esc(org.name || '')}</div></div>
+          <span class="chev" data-icon="chevRight" data-size="20"></span>
         </a>` : ''}
       </div>
     </aside>
   </div>
 
   <div class="action-bar">
-    <div class="action-bar__count"><span class="action-bar__n" data-going-count>${esc(e.attendeeCount || 0)}</span><span class="action-bar__label">${esc(t('event.going'))}</span></div>
-    <button class="going-btn going-btn--full" type="button" data-attend><span data-icon="plus" data-size="20"></span><span>${esc(t('event.cta.go'))}</span></button>
+    <div class="count"><span class="n" data-going-count>${esc(e.attendeeCount || 0)}</span><span class="label">${esc(t('event.going'))}</span></div>
+    <button class="going-btn going-btn-full" type="button" data-attend><span data-icon="plus" data-size="20"></span><span>${esc(t('event.cta.go'))}</span></button>
   </div>
 </main>`;
 }
@@ -210,24 +252,16 @@ function eventBody(e, lang, t, fmt) {
 function organizerBody(org, events, lang, t, fmt) {
   const lb = lang.base;
   const cards = (events || []).map(function (e) {
-    const meta = categoryMeta(e.category, t);
-    const free = !e.isPaid;
-    const place = e.address || (e.city && e.city.name) || t('city.lviv');
-    return `<a class="event-card reveal hoverable" href="${lb}/event/${esc(e.slug)}/">
-      <div class="event-card__cover"><div class="ph ${meta.hue}" style="position:absolute;inset:0"><span class="ph__glyph" data-icon="${meta.glyph}" data-size="34"></span><span class="ph__tag">${esc(meta.label)}</span></div>
-      <span class="event-card__cat cat-chip cat-chip--on-cover"><span data-icon="${meta.glyph}" data-size="14"></span> ${esc(meta.label)}</span></div>
-      <div class="event-card__body"><div class="event-card__top"><span class="event-card__date">${esc(fmt.dateTime(e.startsAt))}</span><span class="event-card__price${free ? ' is-free' : ''}">${esc(priceLabel(e, t))}</span></div>
-      <h3 class="event-card__title">${esc(e.title)}</h3>
-      <div class="event-card__meta"><span class="event-card__place"><span data-icon="pin" data-size="15"></span><span>${esc(place)}</span></span></div></div></a>`;
+    return cardHtml(e, lang, t, fmt);
   }).join('');
   return `
 <main class="event" data-organizer-page data-organizer-id="${esc(org.id)}">
   <a class="back-btn" href="${lb}/"><span data-icon="back" data-size="18"></span><span>${esc(t('event.back'))}</span></a>
   <div class="org-hero" data-org-hero>
-    <div class="avatar org-hero__avatar cat-music" style="font-size:32px">${esc((org.name || '?').charAt(0).toUpperCase())}</div>
-    <div><h1 class="org-hero__name">${esc(org.name || t('organizer.fallbackName'))}</h1>${org.bio ? `<p class="org-hero__bio">${esc(org.bio)}</p>` : ''}</div>
+    <div class="avatar cat-music" style="font-size:32px">${esc((org.name || '?').charAt(0).toUpperCase())}</div>
+    <div><h1 class="name">${esc(org.name || t('organizer.fallbackName'))}</h1>${org.bio ? `<p class="bio">${esc(org.bio)}</p>` : ''}</div>
   </div>
-  <div class="feed__head" style="margin-top:8px"><h2>${esc(t('organizer.events'))}</h2><span class="feed__count" data-org-count></span></div>
+  <div class="feed-head" style="margin-top:8px"><h2>${esc(t('organizer.events'))}</h2><span class="feed-count" data-org-count></span></div>
   <div class="grid" data-org-grid>${cards}</div>
 </main>`;
 }
@@ -367,6 +401,21 @@ module.exports = async function prerender(opts) {
       const html = pageShell(lang, headCtx, organizerBody(org, org.events || [], lang, t, fmt), '', { feedActive: '', mapActive: '' });
       writeFile(distDir, path.join(lang.base, 'organizer', String(id), 'index.html'), html);
       orgIdSet.add(String(id));
+    }
+
+    // inline ready feed cards into the already-built index.html (per language)
+    try {
+      const indexPath = path.join(distDir, lang.base, 'index.html');
+      let indexHtml = fs.readFileSync(indexPath, 'utf8');
+      const feedCards = events.filter(function (e) { return e.slug; })
+        .map(function (e) { return cardHtml(e, lang, t, fmt); }).join('');
+      if (feedCards && FEED_GRID_RE.test(indexHtml)) {
+        indexHtml = indexHtml.replace(FEED_GRID_RE, '$1' + feedCards + '$3');
+        fs.writeFileSync(indexPath, indexHtml, 'utf8');
+        console.log('[prerender] ' + lang.code + ': injected ' + events.length + ' feed cards into index.html');
+      }
+    } catch (err) {
+      console.warn('[prerender] ' + lang.code + ': index feed injection skipped (' + err.message + ')');
     }
   }
 

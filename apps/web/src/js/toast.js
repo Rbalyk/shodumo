@@ -27,9 +27,9 @@
     el.className = 'toast';
     var glyph = opts.icon || 'check';
     el.innerHTML =
-      '<span class="toast__icon">' + icon(glyph, { size: 18 }) + '</span>' +
-      '<span class="toast__msg"></span>';
-    el.querySelector('.toast__msg').textContent = message;
+      '<span class="icon">' + icon(glyph, { size: 18 }) + '</span>' +
+      '<span class="msg"></span>';
+    el.querySelector('.msg').textContent = message;
     host.appendChild(el);
     var ttl = opts.duration || 2600;
     setTimeout(function () {

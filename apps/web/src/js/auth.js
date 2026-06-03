@@ -22,57 +22,57 @@
     el.setAttribute('aria-modal', 'true');
     el.setAttribute('aria-label', t('modal.login.title'));
     el.innerHTML =
-      '<div class="modal__dialog">' +
-      '  <div class="modal__head">' +
+      '<div class="dialog">' +
+      '  <div class="head">' +
       '    <div>' +
-      '      <div class="modal__logo logo"><span class="logo__text">Shodumo</span><span class="logo__dot" aria-hidden="true"></span></div>' +
-      '      <h2 class="modal__title" data-title>' + t('modal.login.title') + '</h2>' +
-      '      <p class="modal__hint" data-hint>' + t('modal.login.hint') + '</p>' +
+      '      <div class="logo"><span class="text">Shodumo</span><span class="dot" aria-hidden="true"></span></div>' +
+      '      <h2 class="title" data-title>' + t('modal.login.title') + '</h2>' +
+      '      <p class="hint" data-hint>' + t('modal.login.hint') + '</p>' +
       '    </div>' +
-      '    <button class="modal__close" type="button" aria-label="' + t('modal.close') + '" data-close>' + icon('close', { size: 20 }) + '</button>' +
+      '    <button class="close" type="button" aria-label="' + t('modal.close') + '" data-close>' + icon('close', { size: 20 }) + '</button>' +
       '  </div>' +
-      '  <div class="modal__tabs" role="tablist" data-tabs>' +
+      '  <div class="tabs" role="tablist" data-tabs>' +
       '    <button type="button" data-tab="login" class="is-active">' + t('auth.login') + '</button>' +
       '    <button type="button" data-tab="register">' + t('auth.register') + '</button>' +
       '  </div>' +
       '  <form data-form novalidate>' +
-      '    <fieldset class="modal__roles" data-field-role hidden>' +
-      '      <span class="field__label">' + t('modal.role') + '</span>' +
+      '    <fieldset class="roles" data-field-role hidden>' +
+      '      <span class="label">' + t('modal.role') + '</span>' +
       '      <label class="role-opt">' +
       '        <input type="radio" name="role" value="attendee" checked>' +
-      '        <span class="role-opt__body"><span class="role-opt__title">' + t('modal.role.attendee') + '</span>' +
-      '        <span class="role-opt__hint">' + t('modal.role.attendeeHint') + '</span></span>' +
+      '        <span class="body"><span class="title">' + t('modal.role.attendee') + '</span>' +
+      '        <span class="hint">' + t('modal.role.attendeeHint') + '</span></span>' +
       '      </label>' +
       '      <label class="role-opt">' +
       '        <input type="radio" name="role" value="organizer">' +
-      '        <span class="role-opt__body"><span class="role-opt__title">' + t('modal.role.organizer') + '</span>' +
-      '        <span class="role-opt__hint">' + t('modal.role.organizerHint') + '</span></span>' +
+      '        <span class="body"><span class="title">' + t('modal.role.organizer') + '</span>' +
+      '        <span class="hint">' + t('modal.role.organizerHint') + '</span></span>' +
       '      </label>' +
       '    </fieldset>' +
-      '    <label class="field modal__field" data-field-name hidden>' +
-      '      <span class="field__label">' + t('modal.name') + '</span>' +
-      '      <span class="field__wrap"><input type="text" name="name" autocomplete="name" placeholder="' + t('modal.namePlaceholder') + '"></span>' +
+      '    <label class="field" data-field-name hidden>' +
+      '      <span class="label">' + t('modal.name') + '</span>' +
+      '      <span class="wrap"><input type="text" name="name" autocomplete="name" placeholder="' + t('modal.namePlaceholder') + '"></span>' +
       '    </label>' +
       '    <label class="field">' +
-      '      <span class="field__label">' + t('modal.email') + '</span>' +
-      '      <span class="field__wrap"><input type="email" name="email" autocomplete="email" placeholder="you@email.com" required></span>' +
+      '      <span class="label">' + t('modal.email') + '</span>' +
+      '      <span class="wrap"><input type="email" name="email" autocomplete="email" placeholder="you@email.com" required></span>' +
       '    </label>' +
       '    <label class="field">' +
-      '      <span class="field__label">' + t('modal.password') + '</span>' +
-      '      <span class="field__wrap"><input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required minlength="6"></span>' +
+      '      <span class="label">' + t('modal.password') + '</span>' +
+      '      <span class="wrap"><input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required minlength="6"></span>' +
       '    </label>' +
-      '    <div class="modal__forgot" data-forgot><button type="button">' + t('modal.forgot') + '</button></div>' +
+      '    <div class="forgot" data-forgot><button type="button">' + t('modal.forgot') + '</button></div>' +
       '    <p class="form-error" data-error></p>' +
-      '    <button type="submit" class="modal__submit" data-submit>' + t('modal.submit.login') + '</button>' +
+      '    <button type="submit" class="submit" data-submit>' + t('modal.submit.login') + '</button>' +
       '  </form>' +
-      '  <div class="modal__sent" data-sent hidden>' +
-      '    <div class="modal__sent-icon">' + icon('mail', { size: 32 }) + '</div>' +
-      '    <h3 class="modal__sent-title">' + t('modal.sent.title') + '</h3>' +
-      '    <p class="modal__sent-text" data-sent-text></p>' +
-      '    <p class="modal__sent-hint">' + t('modal.sent.hint') + '</p>' +
-      '    <button type="button" class="modal__submit" data-sent-done>' + t('modal.sent.done') + '</button>' +
+      '  <div class="sent" data-sent hidden>' +
+      '    <div class="icon">' + icon('mail', { size: 32 }) + '</div>' +
+      '    <h3 class="title">' + t('modal.sent.title') + '</h3>' +
+      '    <p class="text" data-sent-text></p>' +
+      '    <p class="hint">' + t('modal.sent.hint') + '</p>' +
+      '    <button type="button" class="submit" data-sent-done>' + t('modal.sent.done') + '</button>' +
       '  </div>' +
-      '  <p class="modal__legal" data-legal>' + t('modal.legal') + '</p>' +
+      '  <p class="legal" data-legal>' + t('modal.legal') + '</p>' +
       '</div>';
     document.body.appendChild(el);
     modalEl = el;

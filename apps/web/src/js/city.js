@@ -98,11 +98,11 @@
     menu.innerHTML = list.map(function (c) {
       var on = c.slug === slug;
       return (
-        '<button type="button" class="city-select__item' + (on ? ' is-active' : '') + '" role="option"' +
+        '<button type="button" class="item' + (on ? ' is-active' : '') + '" role="option"' +
         ' aria-selected="' + on + '" data-city-pick="' + esc(c.slug) + '">' +
-        '<span class="city-select__pin" data-icon="pin" data-size="16"></span>' +
+        '<span class="pin" data-icon="pin" data-size="16"></span>' +
         '<span>' + esc(nameOf(c.slug)) + '</span>' +
-        (on ? '<span class="city-select__check" data-icon="check" data-size="16"></span>' : '') +
+        (on ? '<span class="check" data-icon="check" data-size="16"></span>' : '') +
         '</button>'
       );
     }).join('');

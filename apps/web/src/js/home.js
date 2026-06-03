@@ -1,9 +1,9 @@
 /* global window, document */
 // ShoDumo — shared renderers (window.SD.render) + home feed controller.
 // Event cards come from ONE source of truth: the <template id="event-card-tpl">
-// embedded in the page (src/pages/partials/event-card.html). The same template
-// is filled at build time by scripts/prerender.js and here on the client — so
-// there are no card HTML strings living in the JS bundle.
+// embedded in the page (src/pages/partials/event-card.html). The template is
+// filled on the client here — so there are no card HTML strings living in the
+// JS bundle.
 (function () {
   window.SD = window.SD || {};
   var api = window.SD.api;
@@ -179,8 +179,8 @@
       q: '',
     };
 
-    // hydrate: the feed is already pre-rendered into the HTML — attach
-    // interactivity to the existing DOM instead of wiping it.
+    // the feed is rendered entirely on the client — bind a delegated save
+    // handler on the grid before the first load fills it with cards.
     window.SD.render.bindSaveButtons(gridEl);
 
     document.addEventListener('sd:city-changed', function (e) {
@@ -265,8 +265,8 @@
     }
 
     updateActive();
-    // freshness pass: pull current data once without flashing skeletons
-    load({ silent: true });
+    // initial client-side load — show skeletons, then render cards from the API
+    load();
   }
 
   window.SD.initHome = initHome;

@@ -1,0 +1,14 @@
+@@include('head.html', {
+  "title": "@@t.meta.organizer.title",
+  "desc": "@@t.meta.organizer.desc",
+  "path": "/organizer/"
+})
+
+@@include('header.html')
+
+<!-- client-rendered shell: organizer.js reads the id from the URL, fetches the
+     organizer profile + events and builds the page into this root -->
+<div data-organizer-root></div>
+
+@@include('tabbar.html', { "feedActive": "", "mapActive": "", "savedActive": "", "profileActive": "" })
+@@include('footer.html')

@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "gulp",
     "build": "gulp build",
-    "prerender": "gulp prerender",
     "clean": "gulp clean"
   },
   "devDependencies": {

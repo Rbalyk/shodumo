@@ -19,9 +19,8 @@ const del = require('del');
 const fs = require('fs');
 
 const env = {
-  // API_URL is the single source of the client API base URL for build,
-  // prerender and the runtime bundle. localhost is only a local-dev default —
-  // in a prod build API_URL must be set and fully replaces it.
+  // API_URL is the single source of the client API base URL — injected into the
+  // HTML/JS at build time and used by the runtime bundle to fetch all content.
     API_BASE_URL: process.env.API_URL,
     SITE_URL: process.env.SITE_URL,
     APP_URL: process.env.APP_URL,
@@ -56,10 +55,14 @@ const T_TOKEN = /@@t\.([A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)*)/g;
 const paths = {
   dist: 'dist',
   html: {
-    pages: 'src/pages/*.html',
+    // top-level pages + client-routed deep-link shells (event/, organizer/)
+    pages: ['src/pages/*.html', 'src/pages/*/index.html'],
     partials: 'src/pages/partials/**/*.html',
     watch: 'src/pages/**/*.html',
   },
+  // root-level files copied verbatim into dist (with env tokens replaced):
+  // _redirects (Pages SPA rewrites), robots.txt, sitemap.xml, favicon.svg
+  static: 'src/static/**/*',
   scss: { entry: 'src/scss/main.scss', watch: 'src/scss/**/*.scss' },
   // explicit bundle order — modules attach to the global `window.SD` namespace
   js: {
@@ -180,20 +183,13 @@ function assets() {
     .pipe(dest(`${paths.dist}/assets`));
 }
 
-function prerender(done) {
-  const run = require('./scripts/prerender');
-  run({
-    apiBaseUrl: env.API_BASE_URL,
-    siteUrl: env.SITE_URL,
-    defaultCity: env.DEFAULT_CITY,
-    distDir: paths.dist,
-    langs: LANGS.map((l) => ({ code: l.code, base: l.base, dict: loadDict(l.code) })),
-  })
-    .then(() => done())
-    .catch((err) => {
-      console.error('[prerender] failed:', err.message);
-      done();
-    });
+// copy root-level static files (_redirects, robots.txt, sitemap.xml, favicon.svg)
+// into dist/, resolving the same env tokens used elsewhere
+function staticFiles() {
+  return src(paths.static, { allowEmpty: true, dot: true })
+    .pipe(replace('__SITE_URL__', env.SITE_URL))
+    .pipe(replace('__API_BASE_URL__', env.API_BASE_URL))
+    .pipe(dest(paths.dist));
 }
 
 function serve() {
@@ -206,15 +202,15 @@ function serve() {
 
   watch(paths.scss.watch, styles);
   watch(paths.js.watch, scripts);
-  watch([paths.html.watch], series(html, prerender)).on('change', browserSync.reload);
+  watch([paths.html.watch], html).on('change', browserSync.reload);
+  watch(paths.static, series(staticFiles)).on('change', browserSync.reload);
   watch(paths.images, series(images)).on('change', browserSync.reload);
   watch(paths.assets, series(assets)).on('change', browserSync.reload);
 }
 
 const build = series(
   clean,
-  parallel(html, styles, scripts, images, assets),
-  prerender,
+  parallel(html, styles, scripts, images, assets, staticFiles),
 );
 
 exports.clean = clean;
@@ -223,6 +219,6 @@ exports.styles = styles;
 exports.scripts = scripts;
 exports.images = images;
 exports.assets = assets;
-exports.prerender = prerender;
+exports.static = staticFiles;
 exports.build = build;
 exports.default = series(build, serve);

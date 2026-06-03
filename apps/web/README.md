@@ -2,7 +2,7 @@
 
 Public site for **ShoDumo** — an API-first afisha of micro-events in Lviv (забіги, дегустації, воркшопи, музика, маркети).
 
-Plain **HTML + SCSS + vanilla JS** (no React/Vue), built with **Gulp**. Consumes the ShoDumo REST API. Event and organizer pages are **pre-rendered at build time** for SEO (server-side HTML, Open Graph, JSON-LD `Event`, canonical URLs, `sitemap.xml`, `robots.txt`).
+Plain **HTML + SCSS + vanilla JS** (no React/Vue), built with **Gulp**. Consumes the ShoDumo REST API. The build emits a **static shell** (HTML/CSS/JS/assets); all content — feed, event pages, organizer pages — is fetched and rendered **on the client** from the API. There is **no build-time prerender**: a new event from the cabinet shows up in the feed and at `/event/:slug` immediately, with no rebuild.
 
 ## Stack
 
@@ -10,13 +10,14 @@ Plain **HTML + SCSS + vanilla JS** (no React/Vue), built with **Gulp**. Consumes
 - **SCSS** — design system with CSS custom properties (runtime light/dark themes)
 - **Vanilla JS** — IIFE modules attached to a global `window.SD` namespace, concatenated into `bundle.js`
 - **Leaflet + OpenStreetMap** — map page and per-event mini-maps
-- **Node pre-render** — `scripts/prerender.js` generates SEO-critical static pages
 
 ## Requirements
 
-- Node.js **18+** (the pre-render script uses the global `fetch`)
-- The ShoDumo API running (default `http://localhost:3000`) for live data and pre-rendering.
-  Without it, the build still succeeds and pre-render falls back to bundled offline sample data.
+- Node.js **18+**
+- The ShoDumo API running (default `http://localhost:3000`) for live data. The
+  build does **not** call the API — it only injects the API base URL into the
+  bundle — so `gulp build` always succeeds even when the API is down; the page
+  then shows its loading / error states at runtime.
 
 ## Setup
 
@@ -29,48 +30,53 @@ cp .env.example .env   # then edit if needed
 
 | Variable        | Default                 | Purpose                                            |
 | --------------- | ----------------------- | -------------------------------------------------- |
-| `API_URL`       | `http://localhost:3000` | REST API base — single source for build, prerender and runtime |
+| `API_URL`       | `http://localhost:3000` | REST API base — single source for build and runtime |
 | `SITE_URL`      | `http://localhost:3001` | Canonical/OG/sitemap absolute URLs                 |
-| `DEFAULT_CITY`  | `lviv`                  | City slug used for the feed and pre-render         |
+| `DEFAULT_CITY`  | `lviv`                  | City slug used for the feed                        |
 | `DEV_PORT`      | `3001`                  | BrowserSync dev server port                        |
 
-`API_URL` is the **single source** of the client API address: the same value
-feeds the runtime JS bundle (`gulp build`), the pre-render fetches and injected
-markup (`gulp prerender`), and dev. The `http://localhost:3000` default applies
-only when `API_URL` is unset (local dev); in a prod build `API_URL` fully
-replaces it. Set it for prod, e.g.:
+`API_URL` is the **single source** of the client API address: the value is baked
+into the JS bundle and HTML at build time so the runtime can fetch all content.
+Set it for prod, e.g.:
 
 ```bash
 API_URL=https://api.shodumo.com npm run build
-API_URL=https://api.shodumo.com npm run prerender
 ```
 
-Values are injected at build time by replacing `__API_BASE_URL__`, `__SITE_URL__`, `__DEFAULT_CITY__` tokens in the JS and HTML.
+Values are injected at build time by replacing `__API_BASE_URL__`, `__SITE_URL__`, `__APP_URL__`, `__DEFAULT_CITY__` tokens in the JS and HTML.
 
 ## Scripts
 
 ```bash
 npm run dev        # gulp: build + BrowserSync live-reload on DEV_PORT
-npm run build      # gulp build: clean → html/styles/scripts/images/assets → prerender
-npm run prerender  # regenerate SEO pages, sitemap, robots only
+npm run build      # gulp build: clean → html/styles/scripts/images/assets/static
 npm run clean      # remove dist/
 ```
+
+On **Cloudflare Pages** the build command is `npm ci && npm run build` (no
+prerender step). The `dist/_redirects` file rewrites deep links to the right
+language shell so refreshing `/event/:slug` works.
 
 ## Build output (`dist/`)
 
 ```
 dist/
-  index.html                  # home feed (static cards pre-rendered, then hydrated)
+  index.html                  # home feed shell (cards rendered on the client)
   map.html                    # Leaflet map of events
   saved.html                  # current user's saved events (auth-gated, noindex)
   profile.html                # current user's profile card (auth-gated, noindex)
   about.html
-  event/<slug>/index.html     # pre-rendered, OG + JSON-LD Event + canonical
-  organizer/<id>/index.html   # pre-rendered organizer profile + events
+  event/index.html            # event shell — event.js renders from /events/:slug
+  organizer/index.html        # organizer shell — organizer.js renders from /organizers/:id
+  en/…                        # full English branch mirroring the above
   css/main.css(.map)
   js/bundle.js(.map)
-  sitemap.xml  robots.txt  favicon.svg
+  _redirects  sitemap.xml  robots.txt  favicon.svg
 ```
+
+Deep links (`/event/:slug/`, `/organizer/:id/`, plus their `/en/…` twins) are
+served by the matching shell via `_redirects` (status-200 rewrites); the client
+reads the slug/id from the URL and fetches the content.
 
 ## Architecture
 
@@ -86,8 +92,8 @@ dist/
 | `city.js`       | `city`                       | City picker dropdown (excludes occupied cities), locative-case hero, `sd:city-changed` |
 | `map.js`        | `map`, `initMapPageRoute`    | Leaflet map page + event mini-map                         |
 | `home.js`       | `render`, `initHome`         | Shared card/skeleton/empty renderers + feed controller    |
-| `event.js`      | `initEvent`                  | Event detail hydration: attend, share, mini-map, similar  |
-| `organizer.js`  | `initOrganizer`              | Organizer profile hydration                               |
+| `event.js`      | `initEvent`                  | Event detail: reads slug from URL, fetches + renders, attend/share/mini-map/similar |
+| `organizer.js`  | `initOrganizer`              | Organizer profile: reads id from URL, fetches + renders profile + events |
 | `account.js`    | `initSaved`, `initProfile`   | Saved-events list + profile card (auth-gated)             |
 | `main.js`       | —                            | Bootstrap: theme, header, reveal-on-scroll, route dispatch |
 
@@ -105,38 +111,29 @@ Category slugs are **Cyrillic** (`забіги`, `дегустації`, `вор
 
 ### States & a11y
 
-- Skeleton placeholders while loading, empty-state and error-state (with retry) views, optimistic attend/save with rollback on failure.
-- Offline-safe pre-render fallback, lazy-loaded cover images, `aria-*` on dialogs/regions, keyboard-dismissable auth modal, reduced-motion-friendly reveal.
+- Skeleton placeholders while loading, empty-state and error-state (with retry) views, optimistic attend/save with rollback on failure, 404 not-found state on event/organizer pages.
+- Lazy-loaded cover images, `aria-*` on dialogs/regions, keyboard-dismissable auth modal, reduced-motion-friendly reveal.
 
 ## Theming
 
 Light/dark themes are CSS custom properties toggled via `data-theme` on `<html>`. **Light is the default**; only an explicit user choice (stored in `localStorage` as `sd_theme`) switches to dark — `prefers-color-scheme` is intentionally ignored. An inline script in `<head>` applies the saved theme before paint to avoid a flash.
 
-## Feed rendering & freshness
+## Feed rendering
 
-The home feed is **pre-rendered for SEO and first paint**: `gulp prerender` fetches
-published events and inlines ready event cards into `dist/index.html` (and
-`dist/en/index.html`). The card markup has a **single source of truth** — the
-`src/pages/partials/event-card.html` template — which is filled with `{{token}}`
-values both by the Node pre-renderer (build time) and by the client (it clones the
-embedded `<template id="event-card-tpl">` at runtime). There are **no card HTML
-strings in the JS bundle**.
+The home feed is rendered **entirely on the client**: `home.js` fetches published
+events and builds cards on load (skeletons → cards, with empty/error/retry states).
+The card markup has a **single source of truth** — the
+`src/pages/partials/event-card.html` template — filled with `{{token}}` values by
+the client, which clones the embedded `<template id="event-card-tpl">` at runtime.
+There are **no card HTML strings in the JS bundle**.
 
-On load the client **hydrates** rather than replacing: it keeps the pre-rendered
-cards, attaches interactivity, then silently re-fetches once to reconcile. Filter
-and city changes fetch a subset and re-render only the grid.
-
-Because the static cards are a **build-time snapshot**, they only refresh when the
-site is rebuilt. To keep the pre-rendered feed current on **Cloudflare Pages**,
-configure a **Deploy Hook** (Pages → Settings → Builds & deployments → Deploy hooks)
-and have the API call that hook URL whenever events change (publish/update/delete),
-or trigger it on a schedule (e.g. an hourly cron). Each hook call re-runs the build,
-re-fetches events, and regenerates the inlined feed. _(No code change required —
-this is purely deploy configuration.)_
+Because everything is fetched live, the feed and every `/event/:slug` is **always
+current**: a new event created in the cabinet appears immediately, with no rebuild
+or deploy hook required.
 
 ## Notes
 
-- Pre-rendered pages embed `data-icon` / `data-logo-mark` placeholders that the bundle fills on load, so the Node renderer and the browser share one icon source of truth.
-- ЧПУ routes (`/event/:slug/`, `/organizer/:id/`) are emitted as directory `index.html` files so they work on any static host.
+- Pages embed `data-icon` / `data-logo-mark` placeholders that the bundle fills on load.
+- ЧПУ routes (`/event/:slug/`, `/organizer/:id/`) resolve to per-language shells via `dist/_redirects` (status-200 rewrites); the client reads the slug/id from the URL.
 - The city picker stores the choice in `localStorage` (`sd_city`), filters the feed, and rewrites the hero with the Ukrainian locative case + correct preposition (`у`/`в`). Occupied cities are excluded from the list.
 - Auth-gated pages (`saved.html`, `profile.html`) set `<meta name="robots" content="noindex, nofollow">` via a per-page `robots` include variable (default `index, follow`).

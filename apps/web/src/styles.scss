@@ -1,0 +1,10 @@
+/* ShoDumo — global styles: public design system (tokens, reset, primitives)
+   plus the cabinet/admin Material theme (brand-coloured, scoped under
+   `.cab-scope`). */
+
+@use 'scss/tokens';
+@use 'scss/base';
+@use 'scss/components';
+@use 'scss/animations';
+@use 'scss/map';
+@use 'scss/cabinet';

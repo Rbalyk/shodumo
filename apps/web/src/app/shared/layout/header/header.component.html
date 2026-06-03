@@ -1,0 +1,201 @@
+<!-- desktop top bar -->
+<header class="topbar">
+  <div class="inner">
+    <a class="logo" [routerLink]="homeHref()" [attr.aria-label]="'brand.home' | t">
+      <span class="text">Shodumo</span><span class="dot" aria-hidden="true"></span>
+    </a>
+
+    <form class="search" role="search" (submit)="onSearch($event, q.value)">
+      <sd-icon class="search-icon" name="search" [size]="20" />
+      <input
+        #q
+        type="search"
+        name="q"
+        [placeholder]="'nav.search' | t"
+        [attr.aria-label]="'nav.search' | t"
+      />
+    </form>
+
+    <div class="actions">
+      <div class="city-select" [class.is-active]="cityMenuOpen()">
+        <button
+          class="city"
+          type="button"
+          (click)="toggleCityMenu()"
+          aria-haspopup="listbox"
+          [attr.aria-expanded]="cityMenuOpen()"
+          [attr.aria-label]="'nav.chooseCity' | t"
+        >
+          <sd-icon name="pin" [size]="18" />
+          <span>{{ city.nameOf(city.selected()) }}</span>
+          <sd-icon class="chev" name="chevDown" [size]="16" />
+        </button>
+        @if (cityMenuOpen()) {
+          <div class="menu" role="listbox">
+            @for (c of city.cities(); track c.id) {
+              <button
+                class="item"
+                type="button"
+                role="option"
+                [class.is-active]="c.slug === city.selected()"
+                [attr.aria-selected]="c.slug === city.selected()"
+                (click)="selectCity(c.slug)"
+              >
+                <span class="pin"><sd-icon name="pin" [size]="16" /></span>
+                <span>{{ c.name }}</span>
+                @if (c.slug === city.selected()) {
+                  <span class="check"><sd-icon name="check" [size]="16" /></span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <a class="icon-btn" [routerLink]="mapHref()" [attr.aria-label]="'nav.map' | t">
+        <sd-icon name="map" [size]="20" />
+      </a>
+
+      <button
+        class="btn btn-soft btn-lang"
+        type="button"
+        (click)="switchLang($event)"
+        [attr.aria-label]="'nav.langSwitch' | t"
+      >
+        {{ 'lang.switch' | t }}
+      </button>
+
+      <button
+        class="icon-btn"
+        type="button"
+        (click)="theme.toggle()"
+        [attr.aria-label]="'nav.theme' | t"
+      >
+        <sd-icon [name]="theme.theme() === 'dark' ? 'sun' : 'moon'" [size]="20" />
+      </button>
+
+      @if (!auth.isAuthenticated()) {
+        <button class="btn btn-soft" type="button" (click)="openAuth('login')">
+          {{ 'auth.login' | t }}
+        </button>
+        <button class="btn btn-accent" type="button" (click)="openAuth('register')">
+          {{ 'auth.register' | t }}
+        </button>
+      } @else {
+        @if (auth.isOrganizer()) {
+          <a class="btn btn-accent" [routerLink]="createHref">{{ 'auth.createEvent' | t }}</a>
+        }
+        @if (auth.isAdmin()) {
+          <div class="admin-menu" [class.is-open]="adminMenuOpen()">
+            <button
+              class="avatar avatar-user"
+              type="button"
+              (click)="toggleAdminMenu()"
+              [attr.aria-expanded]="adminMenuOpen()"
+              [attr.aria-label]="'nav.profile' | t"
+            >
+              {{ avatarInitial() }}
+            </button>
+            @if (adminMenuOpen()) {
+              <div class="menu" role="menu">
+                <a class="item" role="menuitem" routerLink="/admin/moderation">
+                  <sd-icon name="check" [size]="18" /><span>{{ 'nav.moderation' | t }}</span>
+                </a>
+                <a class="item" role="menuitem" routerLink="/admin/taxonomy">
+                  <sd-icon name="list" [size]="18" /><span>{{ 'nav.taxonomy' | t }}</span>
+                </a>
+                <a class="item" role="menuitem" [routerLink]="homeHref()">
+                  <sd-icon name="feed" [size]="18" /><span>{{ 'app.toSite' | t }}</span>
+                </a>
+                <button class="item" type="button" role="menuitem" (click)="logout()">
+                  <sd-icon name="back" [size]="18" /><span>{{ 'app.signOut' | t }}</span>
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a
+            class="avatar avatar-user"
+            [routerLink]="profileHref()"
+            [attr.aria-label]="'nav.profile' | t"
+          >
+            {{ avatarInitial() }}
+          </a>
+          <button class="btn btn-soft" type="button" (click)="logout()">
+            {{ 'auth.logout' | t }}
+          </button>
+        }
+      }
+    </div>
+  </div>
+</header>
+
+<!-- mobile header -->
+<div class="mobile-header">
+  <div class="top">
+    <a class="logo" [routerLink]="homeHref()" [attr.aria-label]="'brand.home' | t">
+      <span class="text">Shodumo</span><span class="dot" aria-hidden="true"></span>
+    </a>
+    <div class="mobile-actions">
+      <div class="city-select" [class.is-active]="cityMenuOpen()">
+        <button
+          class="city"
+          type="button"
+          (click)="toggleCityMenu()"
+          aria-haspopup="listbox"
+          [attr.aria-expanded]="cityMenuOpen()"
+          [attr.aria-label]="'nav.chooseCity' | t"
+        >
+          <sd-icon name="pin" [size]="16" />
+          <span>{{ city.nameOf(city.selected()) }}</span>
+          <sd-icon class="chev" name="chevDown" [size]="14" />
+        </button>
+        @if (cityMenuOpen()) {
+          <div class="menu right" role="listbox">
+            @for (c of city.cities(); track c.id) {
+              <button
+                class="item"
+                type="button"
+                role="option"
+                [class.is-active]="c.slug === city.selected()"
+                (click)="selectCity(c.slug)"
+              >
+                <span class="pin"><sd-icon name="pin" [size]="16" /></span>
+                <span>{{ c.name }}</span>
+                @if (c.slug === city.selected()) {
+                  <span class="check"><sd-icon name="check" [size]="16" /></span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
+      <button
+        class="btn btn-soft btn-lang mobile-lang"
+        type="button"
+        (click)="switchLang($event)"
+        [attr.aria-label]="'nav.langSwitch' | t"
+      >
+        {{ 'lang.switch' | t }}
+      </button>
+      <button
+        class="icon-btn mobile-theme"
+        type="button"
+        (click)="theme.toggle()"
+        [attr.aria-label]="'nav.theme' | t"
+      >
+        <sd-icon [name]="theme.theme() === 'dark' ? 'sun' : 'moon'" [size]="20" />
+      </button>
+    </div>
+  </div>
+  <form class="search" role="search" (submit)="onSearch($event, mq.value)">
+    <sd-icon class="search-icon" name="search" [size]="20" />
+    <input
+      #mq
+      type="search"
+      name="q"
+      [placeholder]="'nav.search' | t"
+      [attr.aria-label]="'nav.search' | t"
+    />
+  </form>
+</div>

@@ -66,6 +66,27 @@ services:
     expose:
       - "3000"
 
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      # хости, для яких SSR-движок рендерить (localhost додається автоматично)
+      ALLOWED_HOSTS: ${WEB_ALLOWED_HOSTS}
+      # канонічний публічний origin — для robots.txt / sitemap.xml / hreflang
+      SITE_URL: ${WEB_BASE_URL}
+      # SSR HttpClient ходить до API внутрішньою docker-мережею, не через публічний edge
+      API_INTERNAL_URL: http://api:3000
+      # browser-facing origin (фолбек для sitemap, якщо internal недоступний)
+      API_PUBLIC_URL: ${API_PUBLIC_URL}
+    expose:
+      - "4000"
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
@@ -74,6 +95,7 @@ services:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
       - api
+      - web
 
 volumes:
   pgdata:

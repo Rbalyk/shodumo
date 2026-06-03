@@ -1,0 +1,168 @@
+@if (loading()) {
+  <main class="event">
+    <div class="empty-state">
+      <div class="icon"><sd-icon name="calendar" [size]="34" /></div>
+      <h3>{{ 'event.loading' | t }}</h3>
+    </div>
+  </main>
+} @else if (notFound()) {
+  <main class="event">
+    <div class="empty-state">
+      <div class="icon"><sd-icon name="close" [size]="34" /></div>
+      <h3>{{ 'event.notFoundTitle' | t }}</h3>
+      <p>{{ 'event.notFoundText' | t }}</p>
+      <a class="btn btn-soft" [href]="i18n.url('/')">{{ 'event.toFeed' | t }}</a>
+    </div>
+  </main>
+} @else if (vm()) {
+  @let v = vm()!;
+  <main class="event">
+    <a class="back-btn" [href]="i18n.url('/')">
+      <sd-icon name="back" [size]="18" /><span>{{ 'event.back' | t }}</span>
+    </a>
+
+    <div class="layout">
+      <div class="main">
+        <div class="hero-cover">
+          <div class="ph {{ v.hue }}">
+            @if (v.cover) {
+              <img class="cover-img" [src]="v.cover" [alt]="v.title" />
+            } @else {
+              <span class="glyph"><sd-icon [name]="v.glyph" [size]="64" /></span>
+              <span class="tag">{{ v.catLabel }}</span>
+            }
+          </div>
+          <span class="cat cat-chip cat-chip-on-cover">
+            <sd-icon [name]="v.glyph" [size]="14" /> {{ v.catLabel }}
+          </span>
+          <button class="share-btn" type="button" (click)="share()">
+            <sd-icon name="share" [size]="18" /><span>{{ 'event.share' | t }}</span>
+          </button>
+        </div>
+
+        <div class="badges">
+          <span class="badge" [class.badge-free]="!v.isPaid" [class.badge-paid]="v.isPaid">
+            {{ v.priceLabel }}
+          </span>
+          <span class="cat-chip">
+            <sd-icon [name]="v.glyph" [size]="14" /> {{ v.catLabel }}
+          </span>
+        </div>
+
+        <h1 class="heading">{{ v.title }}</h1>
+
+        <div class="info-rows">
+          <div class="info-row">
+            <span class="icon"><sd-icon name="calendar" [size]="20" /></span>
+            <div>
+              <div class="title">{{ v.shortDate }}</div>
+              <div class="sub">{{ v.time }}</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <span class="icon"><sd-icon name="pin" [size]="20" /></span>
+            <div>
+              <div class="title">{{ v.place }}</div>
+              <div class="sub">{{ v.cityName }}</div>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title">{{ 'event.about' | t }}</h2>
+        <div class="desc">
+          @for (para of paragraphs(); track $index) {
+            <p>{{ para }}</p>
+          }
+        </div>
+
+        @if (v.lat != null && v.lng != null) {
+          <sd-mini-map
+            [lat]="v.lat"
+            [lng]="v.lng"
+            [hue]="v.hue"
+            [ariaLabel]="'event.mapAria' | t"
+          />
+        }
+
+        @if (similar().length) {
+          <section class="similar">
+            <h2>{{ 'event.similar' | t }}</h2>
+            <div class="grid">
+              @for (s of similar(); track s.id) {
+                <sd-event-card [event]="s" />
+              }
+            </div>
+          </section>
+        }
+      </div>
+
+      <aside class="aside">
+        <div class="panel">
+          <div class="info-row">
+            <span class="icon"><sd-icon name="calendar" [size]="20" /></span>
+            <div>
+              <div class="title">{{ v.dateLabel }}</div>
+              <div class="sub">{{ v.place }}</div>
+            </div>
+          </div>
+
+          <div class="going-box">
+            <div>
+              <span class="n">{{ goingCount() }}</span>
+              <span class="label">{{ 'event.going' | t }}</span>
+            </div>
+            <span class="icon"><sd-icon name="users" [size]="26" /></span>
+          </div>
+
+          <div class="actions">
+            <button
+              class="going-btn going-btn-full"
+              type="button"
+              [class.is-going]="attending()"
+              (click)="toggleAttend()"
+            >
+              <sd-icon [name]="attending() ? 'check' : 'plus'" [size]="20" />
+              <span>{{ (attending() ? 'event.cta.going' : 'event.cta.go') | t }}</span>
+            </button>
+            <button
+              class="heart-btn"
+              type="button"
+              [class.is-saved]="saved()"
+              [attr.aria-label]="'event.save' | t"
+              (click)="toggleSave()"
+            >
+              <sd-icon name="heart" [size]="20" />
+            </button>
+          </div>
+
+          @if (v.organizer?.id; as orgId) {
+            <a class="organizer-card" [href]="i18n.url('/organizer/' + orgId)">
+              <span class="avatar cat-music">{{ orgInitial() }}</span>
+              <div>
+                <div class="label">{{ 'event.organizer' | t }}</div>
+                <div class="name">{{ v.organizer?.name }}</div>
+              </div>
+              <span class="chev"><sd-icon name="chevRight" [size]="20" /></span>
+            </a>
+          }
+        </div>
+      </aside>
+    </div>
+
+    <div class="action-bar">
+      <div class="count">
+        <span class="n">{{ goingCount() }}</span>
+        <span class="label">{{ 'event.going' | t }}</span>
+      </div>
+      <button
+        class="going-btn going-btn-full"
+        type="button"
+        [class.is-going]="attending()"
+        (click)="toggleAttend()"
+      >
+        <sd-icon [name]="attending() ? 'check' : 'plus'" [size]="20" />
+        <span>{{ (attending() ? 'event.cta.going' : 'event.cta.go') | t }}</span>
+      </button>
+    </div>
+  </main>
+}

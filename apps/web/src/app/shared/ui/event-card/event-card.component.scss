@@ -1,0 +1,116 @@
+@use '../../../../scss/mixins' as *;
+
+:host {
+  display: block;
+}
+
+// ---------- event card (single source for feed / organizer / saved grids) ----------
+.event-card {
+  background: var(--surface);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  width: 100%;
+
+  .cover {
+    position: relative;
+    height: 156px;
+
+    .ph {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .heart-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
+    }
+  }
+
+  .cat {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+  }
+
+  .body {
+    padding: 14px 16px 16px;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .date {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .price {
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 12.5px;
+
+    &.is-free {
+      color: var(--free);
+    }
+  }
+
+  .title {
+    font-size: 17.5px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.22;
+    margin: 0 0 12px;
+    text-wrap: pretty;
+    @include line-clamp(2);
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-2);
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  .place {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .going {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+}

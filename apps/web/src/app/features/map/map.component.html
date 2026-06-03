@@ -1,0 +1,9 @@
+<main class="map-page">
+  <div class="toolbar">
+    <h1>{{ 'map.title' | t }}</h1>
+    <a class="btn btn-soft" [href]="i18n.url('/')">
+      <sd-icon name="list" [size]="16" /> {{ 'view.list' | t }}
+    </a>
+  </div>
+  <div class="map" role="region" [attr.aria-label]="'map.region' | t" #canvas></div>
+</main>

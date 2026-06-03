@@ -1,0 +1,27 @@
+<nav class="tabbar" [attr.aria-label]="'nav.menu' | t">
+  <a
+    [routerLink]="homeHref()"
+    routerLinkActive="is-active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [attr.aria-label]="'tab.feed' | t"
+  >
+    <sd-icon name="feed" [size]="22" />
+    <span class="label">{{ 'tab.feed' | t }}</span>
+  </a>
+  <a [routerLink]="mapHref()" routerLinkActive="is-active" [attr.aria-label]="'tab.map' | t">
+    <sd-icon name="map" [size]="22" />
+    <span class="label">{{ 'tab.map' | t }}</span>
+  </a>
+  <a [routerLink]="savedHref()" routerLinkActive="is-active" [attr.aria-label]="'tab.saved' | t">
+    <sd-icon name="heart" [size]="22" />
+    <span class="label">{{ 'tab.saved' | t }}</span>
+  </a>
+  <a
+    [routerLink]="profileHref()"
+    routerLinkActive="is-active"
+    [attr.aria-label]="'tab.profile' | t"
+  >
+    <sd-icon name="profile" [size]="22" />
+    <span class="label">{{ 'tab.profile' | t }}</span>
+  </a>
+</nav>

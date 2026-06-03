@@ -1,0 +1,13 @@
+<footer class="site-footer">
+  <div class="inner">
+    <a class="logo" [routerLink]="homeHref()" [attr.aria-label]="'brand.home' | t">
+      <span class="text">Shodumo</span><span class="dot" aria-hidden="true"></span>
+    </a>
+    <nav class="links" [attr.aria-label]="'footer.nav' | t">
+      <a [routerLink]="homeHref()">{{ 'footer.feed' | t }}</a>
+      <a [routerLink]="mapHref()">{{ 'footer.map' | t }}</a>
+      <a [routerLink]="aboutHref()">{{ 'footer.about' | t }}</a>
+    </nav>
+    <p class="copy">{{ 'footer.copy' | t }}</p>
+  </div>
+</footer>

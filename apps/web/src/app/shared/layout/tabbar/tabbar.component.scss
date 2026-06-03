@@ -1,0 +1,39 @@
+@use '../../../../scss/variables' as *;
+@use '../../../../scss/mixins' as *;
+
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-tabbar;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+
+  @include from($bp-md) {
+    display: none;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    color: var(--ink-3);
+    position: relative;
+
+    &.is-active {
+      color: var(--accent);
+    }
+
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+    }
+  }
+}

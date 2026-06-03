@@ -1,0 +1,73 @@
+@if (notFound()) {
+  <main class="event">
+    <div class="empty-state">
+      <div class="icon"><sd-icon name="close" [size]="34" /></div>
+      <h3>{{ 'organizer.emptyTitle' | t }}</h3>
+      <p>{{ 'organizer.emptyText' | t }}</p>
+      <a class="btn btn-soft" [href]="i18n.url('/')">{{ 'event.toFeed' | t }}</a>
+    </div>
+  </main>
+} @else {
+  <main class="event">
+    <a class="back-btn" [href]="i18n.url('/')">
+      <sd-icon name="back" [size]="18" /><span>{{ 'event.back' | t }}</span>
+    </a>
+
+    @if (org(); as o) {
+      <div class="org-hero">
+        @if (o.avatar) {
+          <img class="avatar" [src]="o.avatar" [alt]="o.name" />
+        } @else {
+          <div class="avatar cat-music">{{ avatarInitial() }}</div>
+        }
+        <div>
+          <h1 class="name">{{ o.name || ('organizer.fallbackName' | t) }}</h1>
+          @if (o.bio) {
+            <p class="bio">{{ o.bio }}</p>
+          }
+          @if (links().length) {
+            <div class="links">
+              @for (link of links(); track link.key) {
+                <a [href]="link.href" target="_blank" rel="noopener">{{ link.key | t }}</a>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="feed-head" style="margin-top: 8px">
+      <h2>{{ 'organizer.events' | t }}</h2>
+      @if (!loading() && events().length) {
+        <span class="feed-count">{{ 'feed.count' | t: { n: events().length } }}</span>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="grid">
+        @for (s of [0, 1, 2, 3, 4, 5]; track s) {
+          <div class="skeleton-card">
+            <div class="skel" style="height: 156px"></div>
+            <div class="body">
+              <div class="skel" style="height: 12px; width: 50%"></div>
+              <div class="skel" style="height: 18px; width: 85%"></div>
+              <div class="skel" style="height: 12px; width: 60%"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (!events().length) {
+      <div class="empty-state">
+        <div class="icon"><sd-icon name="calendar" [size]="34" /></div>
+        <h3>{{ 'organizer.emptyTitle' | t }}</h3>
+        <p>{{ 'organizer.emptyText' | t }}</p>
+      </div>
+    } @else {
+      <div class="grid">
+        @for (event of events(); track event.id) {
+          <sd-event-card [event]="event" />
+        }
+      </div>
+    }
+  </main>
+}

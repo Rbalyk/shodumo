@@ -1,0 +1,173 @@
+@use '../../../scss/variables' as *;
+@use '../../../scss/mixins' as *;
+
+:host {
+  display: block;
+}
+
+.feed {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 16px 18px 40px;
+
+  @include from($bp-md) {
+    padding: 28px 40px 56px;
+  }
+
+  .layout {
+    display: flex;
+    gap: 28px;
+  }
+
+  .main {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+// ---------- filter row + view toggle ----------
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+
+  @include until($bp-md) {
+    overflow-x: auto;
+    @include no-scrollbar;
+  }
+
+  @include from($bp-md) {
+    flex-wrap: wrap;
+  }
+}
+
+.view-toggle {
+  margin-left: auto;
+  display: none;
+  gap: 4px;
+  padding: 4px;
+  background: var(--surface-2);
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+
+  @include from($bp-md) {
+    display: flex;
+  }
+
+  button,
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-2);
+
+    &.is-active {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: var(--shadow-card);
+    }
+  }
+}
+
+// ---------- sidebar ----------
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(#{$header-h} + 24px);
+  align-self: flex-start;
+  display: none;
+
+  @include from($bp-lg) {
+    display: block;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 20px;
+  }
+
+  .section {
+    margin-bottom: 22px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    font-size: 14.5px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--ink-2);
+
+    &.is-active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+  }
+}
+
+// ---------- feed heading + count ----------
+.feed-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+
+    @include from($bp-md) {
+      font-size: 22px;
+    }
+  }
+}
+
+.feed-count {
+  font-size: 14.5px;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  // minmax(0, 1fr) (not the default minmax(auto, 1fr)) so tracks may shrink below
+  // their content's min-content size — otherwise the grid overflows `.main`.
+  grid-template-columns: minmax(0, 1fr);
+
+  @include from($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  @include from($bp-lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

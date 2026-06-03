@@ -1,0 +1,125 @@
+@if (open()) {
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="false"
+    [attr.aria-label]="(isRegister() ? 'modal.register.title' : 'modal.login.title') | t"
+    (click)="$event.target === $event.currentTarget && close()"
+  >
+    <div class="dialog">
+      <div class="head">
+        <div>
+          <div class="logo"><span class="text">Shodumo</span><span class="dot" aria-hidden="true"></span></div>
+          <h2 class="title">{{ (isRegister() ? 'modal.register.title' : 'modal.login.title') | t }}</h2>
+          @if (!sent()) {
+            <p class="hint">{{ (isRegister() ? 'modal.register.hint' : 'modal.login.hint') | t }}</p>
+          }
+        </div>
+        <button class="close" type="button" [attr.aria-label]="'modal.close' | t" (click)="close()">
+          <sd-icon name="close" [size]="20" />
+        </button>
+      </div>
+
+      @if (!sent()) {
+        <div class="tabs" role="tablist">
+          <button
+            type="button"
+            [class.is-active]="!isRegister()"
+            (click)="setMode('login')"
+          >
+            {{ 'auth.login' | t }}
+          </button>
+          <button
+            type="button"
+            [class.is-active]="isRegister()"
+            (click)="setMode('register')"
+          >
+            {{ 'auth.register' | t }}
+          </button>
+        </div>
+
+        <form [formGroup]="form" novalidate>
+          @if (isRegister()) {
+            <fieldset class="roles">
+              <span class="label">{{ 'modal.role' | t }}</span>
+              <label class="role-opt">
+                <input type="radio" formControlName="role" value="attendee" />
+                <span class="body">
+                  <span class="title">{{ 'modal.role.attendee' | t }}</span>
+                  <span class="hint">{{ 'modal.role.attendeeHint' | t }}</span>
+                </span>
+              </label>
+              <label class="role-opt">
+                <input type="radio" formControlName="role" value="organizer" />
+                <span class="body">
+                  <span class="title">{{ 'modal.role.organizer' | t }}</span>
+                  <span class="hint">{{ 'modal.role.organizerHint' | t }}</span>
+                </span>
+              </label>
+            </fieldset>
+
+            <label class="field">
+              <span class="label">{{ 'modal.name' | t }}</span>
+              <span class="wrap">
+                <input
+                  type="text"
+                  formControlName="name"
+                  autocomplete="name"
+                  [placeholder]="'modal.namePlaceholder' | t"
+                />
+              </span>
+            </label>
+          }
+
+          <label class="field">
+            <span class="label">{{ 'modal.email' | t }}</span>
+            <span class="wrap">
+              <input
+                type="email"
+                formControlName="email"
+                autocomplete="email"
+                placeholder="you@email.com"
+                required
+              />
+            </span>
+          </label>
+
+          <label class="field">
+            <span class="label">{{ 'modal.password' | t }}</span>
+            <span class="wrap">
+              <input
+                type="password"
+                formControlName="password"
+                [attr.autocomplete]="isRegister() ? 'new-password' : 'current-password'"
+                placeholder="••••••••"
+                required
+                minlength="6"
+              />
+            </span>
+          </label>
+
+          <p class="form-error">{{ formError() }}</p>
+
+          <button type="submit" class="submit" (click)="submit()" [disabled]="submitting()">
+            {{
+              submitting()
+                ? ('modal.submitting' | t)
+                : ((isRegister() ? 'modal.submit.register' : 'modal.submit.login') | t)
+            }}
+          </button>
+        </form>
+
+        <p class="legal">{{ 'modal.legal' | t }}</p>
+      } @else {
+        <div class="sent">
+          <div class="icon"><sd-icon name="mail" [size]="32" /></div>
+          <h3 class="title">{{ 'modal.sent.title' | t }}</h3>
+          <p class="text">{{ 'modal.sent.text' | t: { email: sentEmail() } }}</p>
+          <p class="hint">{{ 'modal.sent.hint' | t }}</p>
+          <button type="button" class="submit" (click)="close()">{{ 'modal.sent.done' | t }}</button>
+        </div>
+      }
+    </div>
+  </div>
+}

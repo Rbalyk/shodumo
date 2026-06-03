@@ -5,7 +5,149 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19083d1c-d0e8-496a-8f54-1e4bea769695" name="Changes" comment="env">
-      <change beforePath="$PROJECT_DIR$/apps/web/gulpfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/gulpfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CLAUDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/CLAUDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/.vscode/extensions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/.vscode/tasks.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/angular.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/claude-md/shodumo-cabinet-prompt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/public/_redirects" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/app.routes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/api/admin.api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/api/events.api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/api/media.api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/api/organizer.api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/api/reference.api.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.guards.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/auth/auth.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/credentials.interceptor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/http/error.interceptor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/core/models/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/admin.routes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/moderation/moderation.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/moderation/moderation.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/moderation/moderation.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/taxonomy/taxonomy.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/taxonomy/taxonomy.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/admin/taxonomy/taxonomy.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/auth/login.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/auth/login.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/auth/login.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/cabinet-events.store.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/cabinet.routes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/dashboard/dashboard.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/dashboard/dashboard.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/dashboard/dashboard.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/event-form/event-form.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/event-form/event-form.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/event-form/event-form.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/events-list/events-list.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/events-list/events-list.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/events-list/events-list.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/organizer-profile/organizer-profile.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/organizer-profile/organizer-profile.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/features/cabinet/organizer-profile/organizer-profile.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/layout/shell.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/layout/shell.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/layout/shell.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/animations.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/i18n/dictionaries.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/i18n/i18n.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/i18n/translate.pipe.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/maps/city-coords.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/maps/map-loader.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/maps/map-picker.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/maps/map-picker.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/maps/map-picker.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/confirm/confirm-dialog.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/confirm/confirm-dialog.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/confirm/confirm-dialog.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/confirm/confirm.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/state-panel/state-panel.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/state-panel/state-panel.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/state-panel/state-panel.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/status-badge/status-badge.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/status-badge/status-badge.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/status-badge/status-badge.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/toast/toast.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/toast/toaster.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/toast/toaster.component.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/app/shared/ui/toast/toaster.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.production.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/environments/environment.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/src/styles.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/cabinet/tsconfig.spec.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/.claude/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/cities.uk.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/claude-md/i18n-frontend-prompt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/claude-md/shodumo-fixes-prompt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/claude-md/shodumo-frontend-prompt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/gulpfile.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/en.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/taxonomy.en.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/i18n/uk.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/account.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/api.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/auth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/city.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/event.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/home.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/i18n.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/icons.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/map.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/organizer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/js/toast.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/about.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/event/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/map.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/organizer/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/event-card.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/footer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/head.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/header.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/partials/tabbar.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/profile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/saved.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_animations.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_animations.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_base.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_components.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_components.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_event.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_feed.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_header.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_map.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_map.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_modal.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/_tokens.scss" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/scss/_tokens.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/scss/main.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/static/_redirects" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/static/favicon.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/static/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/static/sitemap.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/.env.prod.example" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/.env.prod.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/deploy/docker-compose.prod.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +194,7 @@
     "npm.build.executor": "Run",
     "npm.dev.executor": "Run",
     "npm.start (1).executor": "Run",
+    "npm.start (2).executor": "Run",
     "npm.start.executor": "Run",
     "ts.external.directory.path": "/Users/romanbalyk/WebstormProjects/shodumo/apps/api/node_modules/typescript/lib"
   }
@@ -68,10 +211,7 @@
       <recent name="$PROJECT_DIR$/apps/web/claude-files" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.build">
-    <configuration name="localhost:3002" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:3002">
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="npm.start (2)">
     <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/web/package.json" />
       <command value="run" />
@@ -102,6 +242,16 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="start (2)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/apps/web/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/apps/api/package.json" />
       <command value="run" />
@@ -114,11 +264,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start (2)" />
         <item itemvalue="npm.dev" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start (1)" />
         <item itemvalue="npm.start" />
-        <item itemvalue="JavaScript Debug.localhost:3002" />
       </list>
     </recent_temporary>
   </component>
@@ -137,7 +287,7 @@
       <option name="presentableId" value="Default" />
       <updated>1780380810359</updated>
       <workItem from="1780380811656" duration="30870000" />
-      <workItem from="1780476057599" duration="14491000" />
+      <workItem from="1780476057599" duration="19351000" />
     </task>
     <task id="LOCAL-00001" summary="redirects">
       <option name="closed" value="true" />
@@ -227,7 +377,15 @@
       <option name="project" value="LOCAL" />
       <updated>1780509907167</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="env">
+      <option name="closed" value="true" />
+      <created>1780511446022</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1780511446022</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

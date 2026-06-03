@@ -1,0 +1,96 @@
+<main class="feed">
+  <div class="filter-row">
+    @for (chip of chips; track chip.cat) {
+      <button
+        class="chip"
+        type="button"
+        [class.is-active]="category() === chip.cat"
+        (click)="setCategory(chip.cat)"
+      >
+        <sd-icon [name]="chip.icon" [size]="16" /> {{ chip.key | t }}
+      </button>
+    }
+
+    <div class="view-toggle">
+      <button type="button" class="is-active">
+        <sd-icon name="list" [size]="16" /> {{ 'view.list' | t }}
+      </button>
+      <a [href]="i18n.url('/map')"><sd-icon name="map" [size]="16" /> {{ 'view.map' | t }}</a>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="card">
+        <div class="section">
+          <div class="title">{{ 'sidebar.categories' | t }}</div>
+          <div class="cat-list">
+            <button class="row" [class.is-active]="category() === ''" (click)="setCategory('')">
+              <sd-icon name="sparkles" [size]="18" /><span>{{ 'sidebar.allEvents' | t }}</span>
+            </button>
+            @for (c of categories(); track c.id) {
+              <button
+                class="row"
+                [class.is-active]="category() === c.slug"
+                (click)="setCategory(c.slug)"
+              >
+                <sd-icon [name]="glyphFor(c)" [size]="18" /><span>{{ c.name }}</span>
+              </button>
+            }
+          </div>
+        </div>
+        <div class="section">
+          <div class="title">{{ 'sidebar.city' | t }}</div>
+          <button class="row is-active" type="button">
+            <sd-icon name="pin" [size]="18" /><span>{{ city.nameOf(city.selected()) }}</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="feed-head">
+        <h2>{{ 'feed.heading' | t }}</h2>
+        @if (!loading() && !error() && events().length) {
+          <span class="feed-count">{{ 'feed.count' | t: { n: total() } }}</span>
+        }
+      </div>
+
+      @if (loading()) {
+        <div class="grid">
+          @for (s of skeletons; track $index) {
+            <div class="skeleton-card">
+              <div class="skel" style="height: 156px"></div>
+              <div class="body">
+                <div class="skel" style="height: 12px; width: 50%"></div>
+                <div class="skel" style="height: 18px; width: 85%"></div>
+                <div class="skel" style="height: 12px; width: 60%"></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else if (error()) {
+        <div class="empty-state">
+          <div class="icon"><sd-icon name="close" [size]="34" /></div>
+          <h3>{{ 'feed.errorTitle' | t }}</h3>
+          <p>{{ 'feed.errorText' | t }}</p>
+          <button class="btn btn-soft" type="button" (click)="retry()">
+            {{ 'feed.retry' | t }}
+          </button>
+        </div>
+      } @else if (!events().length) {
+        <div class="empty-state">
+          <div class="icon"><sd-icon name="search" [size]="34" /></div>
+          <h3>{{ 'feed.noEventsTitle' | t }}</h3>
+          <p>{{ 'feed.noEventsText' | t }}</p>
+        </div>
+      } @else {
+        <div class="grid">
+          @for (event of events(); track event.id) {
+            <sd-event-card [event]="event" />
+          }
+        </div>
+      }
+    </div>
+  </div>
+</main>

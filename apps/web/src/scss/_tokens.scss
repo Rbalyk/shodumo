@@ -1,12 +1,11 @@
 // ===========================================================
-//  ShoDumo — design tokens (ported from design ds.css)
+//  ShoDumo — design tokens (public site)
 //  Manrope, accent gradient, light/dark themes
 // ===========================================================
 
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-
 :root {
   --font: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-cab: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   // accent gradient (purple → magenta → orange)
   --accent: #7c3aed;
@@ -20,6 +19,12 @@
   --r-lg: 26px;
   --r-xl: 34px;
   --r-pill: 999px;
+
+  // shared status hues (used by cabinet/admin primitives)
+  --ok: #0f9d6b;
+  --warn: #c2810b;
+  --danger: #d23f3f;
+  --container: 1280px;
 }
 
 // ---------- light (default) ----------

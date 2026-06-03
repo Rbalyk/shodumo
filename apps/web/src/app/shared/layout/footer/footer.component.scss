@@ -1,0 +1,5 @@
+// Footer uses the global `.site-footer` primitive (src/scss/_components.scss);
+// no component-scoped styles needed.
+:host {
+  display: block;
+}

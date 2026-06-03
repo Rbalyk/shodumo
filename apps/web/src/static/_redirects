@@ -1,7 +1,0 @@
-# Cloudflare Pages SPA rewrites (status 200 = serve shell, keep URL).
-# Deep links / hard refreshes on client-routed pages must return the
-# matching language shell so the JS can read the slug/id from the URL.
-/en/event/*       /en/event/index.html       200
-/en/organizer/*   /en/organizer/index.html   200
-/event/*          /event/index.html          200
-/organizer/*      /organizer/index.html      200

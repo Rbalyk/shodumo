@@ -1,0 +1,5 @@
+// .map-page / .map and all Leaflet-injected DOM are styled globally in
+// src/scss/_map.scss (Leaflet renders outside Angular's view encapsulation).
+:host {
+  display: block;
+}

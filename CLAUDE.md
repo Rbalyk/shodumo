@@ -4,18 +4,21 @@ Monorepo for **ShoDumo**, an API-first afisha of micro-events in Lviv.
 
 ```
 apps/
-  api/      NestJS + Prisma REST API   (source of truth for data)
-  web/      public site — HTML + SCSS + vanilla JS, built with Gulp, static-first
-  cabinet/  organizer/admin SPA — Angular 19 (standalone, signals, OnPush)
+  api/   NestJS + Prisma REST API   (source of truth for data)
+  web/   the whole front-end — one Angular 19 SSR app (standalone, signals, OnPush):
+         public site is server-rendered; cabinet + admin are lazy, client-only routes
 ```
 
-These conventions are **binding** for `apps/web` and `apps/cabinet`. `apps/api`
-is only touched when a feature genuinely needs a schema/contract change — and then
-the change is described first, never migrated silently.
+These conventions are **binding** for `apps/web`. `apps/api` is only touched when a
+feature genuinely needs a schema/contract change — and then the change is described
+first, never migrated silently.
+
+> The former `apps/cabinet` SPA and the gulp `apps/_web_legacy` site have been merged
+> into `apps/web` and removed; `app.shodumo.com` is retired (single origin).
 
 ---
 
-## Angular (`apps/cabinet`)
+## Angular (`apps/web`)
 
 ### Component file layout
 
@@ -77,18 +80,23 @@ the change is described first, never migrated silently.
 
 ---
 
-## Web (`apps/web`)
+## Public SSR (`apps/web` — feed, event, organizer, map, search)
 
-- **Static-first / SEO-first.** HTML + SCSS + vanilla JS (`window.SD` namespace),
-  built with Gulp; event & organizer pages are pre-rendered at build time.
-- Card/markup has a **single source of truth** — the `{{token}}` template
-  `src/pages/partials/event-card.html`, filled by both the Node pre-renderer and
-  the client. **No card HTML strings in the JS bundle.**
-- SCSS follows the same **contextual, no-BEM** convention as the cabinet
-  (`.btn-soft`, nested contextual selectors, no `block__el`).
-- Build-time env injection via tokens (`__API_BASE_URL__`, `__SITE_URL__`,
-  `__APP_URL__`, `__DEFAULT_CITY__`). `API_URL` is the single source of the API
-  address across build, prerender and runtime.
+- **SEO-first, server-rendered.** Public pages render on the server (content in the
+  HTML for crawlers + fast paint) and hydrate without a flash
+  (`provideClientHydration(withEventReplay())` + the HTTP transfer cache).
+- The public pages use **no Angular Material** — plain semantic markup + the shared
+  SCSS primitives; Material is reserved for the cabinet/admin forms.
+- `EventCardComponent` is the **single source of truth** for the feed / organizer /
+  saved grids — no duplicated card markup.
+- **Per-route SEO** via `SeoService` (title/meta/OG, canonical, `uk`/`en`/`x-default`
+  hreflang, JSON-LD). `robots.txt` + `sitemap.xml` are Express routes in `src/server.ts`;
+  missing events/organizers return a real **HTTP 404** (via the `RESPONSE_STATUS` holder).
+- Cabinet (`/cabinet/*`) and admin (`/admin/*`) are **lazy, role-guarded, client-only**
+  (CSR shell from Express) — they use Material + Google Maps and must not SSR.
+- Env: browser-facing API origin, Google Maps key and `siteUrl` are baked from
+  `environment.production.ts`; the server reads `ALLOWED_HOSTS`, `SITE_URL`,
+  `API_INTERNAL_URL`, `API_PUBLIC_URL` at runtime.
 
 ---
 
@@ -97,4 +105,4 @@ the change is described first, never migrated silently.
 - TypeScript strict; no `any` where a real type fits.
 - Keep changes **behavior- and design-preserving** unless a redesign is explicitly
   requested — refactors must stay visually 1:1.
-- Run `ng build` (cabinet) / `npm run build` (web) clean before declaring done.
+- Run `npm run build` (in `apps/web`) clean before declaring done.

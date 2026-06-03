@@ -1,0 +1,36 @@
+@let v = vm();
+<a class="event-card reveal is-in hoverable" [routerLink]="v.href">
+  <div class="cover">
+    @if (v.cover) {
+      <img class="cover-img" [src]="v.cover" [alt]="v.title" loading="lazy" decoding="async" />
+    } @else {
+      <span class="ph {{ v.hue }}">
+        <sd-icon [name]="v.glyph" [size]="34" class="glyph" />
+        <span class="tag">{{ v.catLabel }}</span>
+      </span>
+    }
+    <span class="cat cat-chip cat-chip-on-cover">
+      <sd-icon [name]="v.glyph" [size]="14" />{{ v.catLabel }}
+    </span>
+    <button
+      class="heart-btn heart-btn-on-cover"
+      [class.is-saved]="isSaved()"
+      type="button"
+      (click)="toggleSave($event)"
+      [attr.aria-label]="'event.save' | t"
+    >
+      <sd-icon name="heart" [size]="18" [fill]="isSaved()" />
+    </button>
+  </div>
+  <div class="body">
+    <div class="top">
+      <time class="date" [attr.datetime]="v.startsAtIso">{{ v.dateLabel }}</time>
+      <span class="price" [class.is-free]="!v.isPaid">{{ v.priceLabel }}</span>
+    </div>
+    <h3 class="title">{{ v.title }}</h3>
+    <div class="meta">
+      <span class="place"><sd-icon name="pin" [size]="15" /><span>{{ v.place }}</span></span>
+      <span class="going"><sd-icon name="users" [size]="15" />{{ v.attendeeCount }}</span>
+    </div>
+  </div>
+</a>

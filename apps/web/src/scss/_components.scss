@@ -1,7 +1,7 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
-// ---------- logo: monolithic wordmark + accent dot ("крапка-репліка") ----------
+// ---------- logo: monolithic wordmark + accent dot ----------
 .logo {
   display: inline-flex;
   align-items: flex-end;
@@ -19,7 +19,6 @@
     }
   }
 
-  // the lively accent dot — sits on the baseline like a period
   .dot {
     flex-shrink: 0;
     width: 7px;
@@ -36,7 +35,6 @@
 }
 
 // ---------- buttons ----------
-// base class + flat variant classes (no BEM modifiers)
 .btn {
   display: inline-flex;
   align-items: center;

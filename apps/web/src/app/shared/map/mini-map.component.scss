@@ -1,0 +1,17 @@
+@use '../../../scss/variables' as *;
+@use '../../../scss/mixins' as *;
+
+:host {
+  display: block;
+}
+
+.mini-map {
+  height: 200px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+
+  @include from($bp-lg) {
+    height: 160px;
+  }
+}

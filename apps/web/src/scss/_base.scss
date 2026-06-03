@@ -12,8 +12,6 @@
   display: none !important;
 }
 
-// class-based hide (used by the event-card template where a bare boolean
-// attribute can't survive the <template> innerHTML round-trip)
 .is-hidden {
   display: none !important;
 }
@@ -128,7 +126,7 @@ body.is-locked {
   overflow: hidden;
 }
 
-// ---------- category placeholder cover (ported from ds.css .ph) ----------
+// ---------- category placeholder cover ----------
 .ph {
   position: relative;
   overflow: hidden;

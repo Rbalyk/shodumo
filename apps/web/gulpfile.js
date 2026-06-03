@@ -192,9 +192,25 @@ function staticFiles() {
     .pipe(dest(paths.dist));
 }
 
+// Dev-server fallback that mirrors dist/_redirects: client-routed deep links
+// (/event/<slug>/, /organizer/<id>/, and their /en/ twins) have no file on disk,
+// so rewrite them to the matching language shell. Without this BrowserSync
+// returns "Cannot GET" on a direct visit / refresh of a deep link.
+function spaFallback(req, res, next) {
+  var url = (req.url || '').split('?')[0].split('#')[0];
+  var enPrefix = /^\/en(\/|$)/.test(url) ? '/en' : '';
+  var rest = enPrefix ? url.slice(enPrefix.length) : url;
+  if (/^\/event\/[^/]+/.test(rest)) {
+    req.url = enPrefix + '/event/index.html';
+  } else if (/^\/organizer\/[^/]+/.test(rest)) {
+    req.url = enPrefix + '/organizer/index.html';
+  }
+  next();
+}
+
 function serve() {
   browserSync.init({
-    server: { baseDir: paths.dist },
+    server: { baseDir: paths.dist, middleware: [spaFallback] },
     port: Number(process.env.PORT) || env.DEV_PORT,
     notify: false,
     open: false,

@@ -213,9 +213,14 @@
       if (e.target.closest('[data-retry]')) load();
     });
 
+    // storm guard: only one feed request in flight at a time. Rapid triggers
+    // (city change, category click, retry) coalesce instead of flooding the API.
+    var inflight = false;
     // silent = keep the pre-rendered cards visible until fresh data arrives
     function load(opts) {
       opts = opts || {};
+      if (inflight) return;
+      inflight = true;
       if (!opts.silent) gridEl.innerHTML = window.SD.render.skeletonGrid(6);
       var params = { city: state.city, page: state.page, limit: 12 };
       if (state.category) params.category = state.category;
@@ -234,11 +239,14 @@
         window.SD.render.replaceCards(gridEl, data);
         if (countEl) countEl.textContent = t('feed.count', { n: meta.total || data.length });
       }).catch(function () {
-        // on a silent refresh failure keep the pre-rendered cards in place
+        // No auto-retry / no polling. A silent freshness pass keeps the existing
+        // pre-rendered cards; a user-initiated load shows a manual "Retry" state.
         if (!opts.silent) {
           gridEl.innerHTML = window.SD.render.errorState();
           if (countEl) countEl.textContent = '';
         }
+      }).then(function () {
+        inflight = false;
       });
     }
 

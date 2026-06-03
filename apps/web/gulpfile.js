@@ -22,13 +22,17 @@ const env = {
   // API_URL is the single source of the client API base URL for build,
   // prerender and the runtime bundle. localhost is only a local-dev default —
   // in a prod build API_URL must be set and fully replaces it.
-  API_BASE_URL: process.env.API_URL || 'http://localhost:3000',
-  SITE_URL: process.env.SITE_URL || 'http://localhost:3001',
-  // base URL of the Angular cabinet/admin app (app.shodumo.com in prod) — the
-  // public site links organizers here for "Create event"; shares the auth cookie
-  APP_URL: process.env.APP_URL || 'http://localhost:4200',
-  DEFAULT_CITY: process.env.DEFAULT_CITY || 'lviv',
-  DEV_PORT: Number(process.env.DEV_PORT || 3001),
+    API_BASE_URL: process.env.API_URL,
+    SITE_URL: process.env.SITE_URL,
+    APP_URL: process.env.APP_URL,
+    DEFAULT_CITY: process.env.DEFAULT_CITY,
+    DEV_PORT: Number(process.env.DEV_PORT),
+
+    // API_BASE_URL: 'http://localhost:3000',
+    // SITE_URL: 'http://localhost:3001',
+    // APP_URL: 'http://localhost:4200',
+    // DEFAULT_CITY: 'lviv',
+    // DEV_PORT: Number(3001),
 };
 
 // --- i18n: two static language branches (uk → root, en → /en/) ---

@@ -54,8 +54,28 @@
     return false;
   }
 
+  // Public, anonymous-safe content endpoints. A 401 here must NEVER trigger a
+  // session refresh or a retry — the API serves these without a session, so we
+  // just surface the response (the caller treats it as anonymous data).
+  function isPublicGet(method, path) {
+    if (method !== 'GET') return false;
+    return /^\/(cities|categories|events|organizers)(\/|\?|$)/.test(path);
+  }
+
+  // Session-dead latch: once a refresh definitively fails we treat the user as
+  // anonymous and stop attempting any further refreshes (no storm). Reset on a
+  // successful login/refresh (or on the next full page load).
+  var _sessionDead = false;
+  function clearAuthState() {
+    _sessionDead = true;
+    // drop the readable csrf hint so isAuthed() -> false; further requests then
+    // skip the refresh path entirely instead of looping on a dead session.
+    try { document.cookie = CSRF_COOKIE + '=; Max-Age=0; path=/'; } catch (e) { /* noop */ }
+  }
+
   // low-level request: cookies travel via credentials:'include'; mutations echo
-  // the csrf cookie as a header; one transparent refresh-retry on 401
+  // the csrf cookie as a header; AT MOST one transparent refresh-retry on 401
+  // for protected endpoints — never for public GETs, and never in a loop.
   function request(method, path, body, opts) {
     opts = opts || {};
     var url = BASE + (method === 'GET' ? withLang(path) : path);
@@ -70,14 +90,26 @@
     if (body !== undefined && body !== null) init.body = JSON.stringify(body);
 
     return fetch(url, init).then(function (res) {
-      if (res.status === 401 && !opts._retried && !opts.noAuth && isAuthed()) {
-        return doRefresh().then(function (ok) {
-          if (!ok) { notifyExpired(); throw httpError(res.status, 'Unauthorized'); }
-          var retryOpts = Object.assign({}, opts, { _retried: true });
-          return request(method, path, body, retryOpts);
-        });
-      }
-      return parse(res);
+      if (res.status !== 401) return parse(res);
+
+      // 401 → only protected endpoints may attempt a single refresh. Public GETs,
+      // already-retried requests, anonymous callers and a dead session all skip
+      // straight to surfacing the 401 (caller treats it as "not logged in").
+      var canRefresh =
+        !opts._retried && !opts.noAuth && !_sessionDead &&
+        !isPublicGet(method, path) && isAuthed();
+      if (!canRefresh) return parse(res);
+
+      return doRefresh().then(function (ok) {
+        if (!ok) {
+          // refresh failed: become anonymous and STOP — no retry of the original.
+          clearAuthState();
+          notifyExpired();
+          return parse(res);
+        }
+        // retry exactly once; _retried prevents any further refresh on this path.
+        return request(method, path, body, Object.assign({}, opts, { _retried: true }));
+      });
     });
   }
 
@@ -102,8 +134,11 @@
     return err;
   }
 
+  // Single-flight refresh: concurrent 401s share ONE in-flight refresh request
+  // (the storm guard). A dead session short-circuits without hitting the network.
   var _refreshing = null;
   function doRefresh() {
+    if (_sessionDead) return Promise.resolve(false);
     if (_refreshing) return _refreshing;
     _refreshing = fetch(BASE + '/auth/refresh', {
       method: 'POST',
@@ -112,7 +147,11 @@
     })
       .then(function (res) { return res.ok; })
       .catch(function () { return false; })
-      .then(function (ok) { _refreshing = null; return ok; });
+      .then(function (ok) {
+        _refreshing = null;
+        if (ok) _sessionDead = false; // session is alive again
+        return ok;
+      });
     return _refreshing;
   }
 
@@ -121,11 +160,13 @@
     isAuthed: isAuthed,
 
     // ---- events / feed ----
+    // public feed/detail: cookies still ride along (credentials:'include') so a
+    // logged-in user gets personalized flags, but a 401 never refreshes/retries.
     getEvents: function (params) {
-      return request('GET', '/events' + buildQuery(params), null, { noAuth: !isAuthed() });
+      return request('GET', '/events' + buildQuery(params), null, { noAuth: true });
     },
     getEvent: function (slug) {
-      return request('GET', '/events/' + encodeURIComponent(slug), null, { noAuth: !isAuthed() });
+      return request('GET', '/events/' + encodeURIComponent(slug), null, { noAuth: true });
     },
     // returns a plain Event[] (not paginated)
     getSaved: function () {
@@ -150,7 +191,10 @@
     },
     // sets the session cookies server-side; resolves with the profile
     login: function (payload) {
-      return request('POST', '/auth/login', payload, { noAuth: true });
+      return request('POST', '/auth/login', payload, { noAuth: true }).then(function (profile) {
+        _sessionDead = false; // fresh session — re-enable refresh
+        return profile;
+      });
     },
     refresh: doRefresh,
     me: function () { return request('GET', '/auth/me'); },
